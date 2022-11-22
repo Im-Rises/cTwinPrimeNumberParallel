@@ -1,8 +1,8 @@
 set(HDRS_COMMON_FUNCTIONS "../commonFunctions/commonFunctions.h")
 set(SRCS_COMMON_FUNCTIONS "../commonFunctions/commonFunctions.c")
 
-set(HDRS_MERGE_SORT "../mergeSortSequential/mergeSortSequential.h")
-set(SRCS_MERGE_SORT "../mergeSortSequential/mergeSortSequential.c")
+set(HDRS_MERGE_SORT "../twinPrimeNumberFinder/mergeSortSequential.h")
+set(SRCS_MERGE_SORT "../twinPrimeNumberFinder/mergeSortSequential.c")
 
 
 # Merge sort sequential test
