@@ -1,0 +1,28 @@
+repo:
+  - '*'
+
+readme:
+  - 'README.md'
+
+github-actions:
+  - '.github/**/*.yml'
+
+CMakeLists:
+  - 'CMakeLists.txt'
+  # - 'mergeSortSequential/CMakeLists.txt'
+  # - 'mergeSortParallelOpenMp/CMakeLists.txt'
+  # - 'mergeSortParallelPThread/CMakeLists.txt'
+
+test:
+  - 'test/**/*.{cpp,hpp}'
+
+# mergeSortSequential:
+#   - 'mergeSortSequential/mergeSortSequential.*'
+#   - 'mergeSortSequential/main.c'
+
+# mergeSortParallelOpenMp:
+#   - 'mergeSortParallelOpenMp/mergeSortParallelOpenMp.*'
+#   - 'mergeSortParallelOpenMp/main.c'
+
+commonFunctions:
+  - 'commonFunctions/**/*.{c,h}'
