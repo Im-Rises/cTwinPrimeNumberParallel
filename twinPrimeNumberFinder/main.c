@@ -3,15 +3,26 @@
 #include <time.h>
 
 #define MIN_VALUE 2
-#define MAX_VALUE 100 + 1
+#define MAX_VALUE 100
+
+typedef struct PrimeNumberState PrimeNumberState;
+struct PrimeNumberState {
+    int value;
+    int isPrime;
+};
 
 void* allocateMemory(size_t size);
-void populateArrayAscendingly(int minValue, int maxValue, int* array);
-void printArray(int* array, int size);
+void populateArrayAscendingly(int minValue, int maxValue, PrimeNumberState* array);
+void printArray(PrimeNumberState* array, int size);
+
+void findTwinPrimeNumbers(PrimeNumberState* array, int size);
 
 int main(int argc, char* argv[]) {
-    int* array = allocateMemory((MAX_VALUE - MIN_VALUE) * sizeof(int));
+    struct PrimeNumberState* array = allocateMemory((MAX_VALUE - MIN_VALUE) * sizeof(PrimeNumberState));
     populateArrayAscendingly(MIN_VALUE, MAX_VALUE, array);
+
+    findTwinPrimeNumbers(array, MAX_VALUE - MIN_VALUE);
+
     printArray(array, MAX_VALUE - MIN_VALUE);
 
     free(array);
@@ -28,19 +39,45 @@ void* allocateMemory(size_t size) {
     return memory;
 }
 
-void populateArrayAscendingly(int minValue, int maxValue, int* array) {
+void populateArrayAscendingly(int minValue, int maxValue, PrimeNumberState* array) {
     int i;
     for (i = 0; i + minValue < maxValue; i++)
     {
-        array[i] = i + minValue;
+        array[i].value = i + minValue;
+        array[i].isPrime = 1;
     }
 }
 
-void printArray(int* array, int size) {
+void printArray(PrimeNumberState* array, int size) {
     int i;
     for (i = 0; i < size; i++)
     {
-        printf("%d ", array[i]);
+        printf("%d is prime : %d\n", array[i].value, array[i].isPrime);
     }
     printf("\n");
+}
+
+void findTwinPrimeNumbers(PrimeNumberState* array, int size) {
+    int i = 0;
+    for (i = 0; i < size; i++)
+    {
+        if (array[i].value % 2 == 0)
+        {
+            array[i].isPrime = 0;
+        }
+    }
+
+    //    int k = array[0].value;
+    //    while (k * k <= size)
+    //    {
+    //        int j;
+    //        for (j = 0; j < size; j++)
+    //        {
+    //            if (array[j].value % k == 0 && array[j].value != k)
+    //            {
+    //                array[j].isPrime = 0;
+    //            }
+    //        }
+    //        k++;
+    //    }
 }
