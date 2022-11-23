@@ -1,31 +1,62 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
+#include <math.h>
 
-#define MIN_VALUE 2
 #define MAX_VALUE 100
 
-typedef struct PrimeNumberState PrimeNumberState;
-struct PrimeNumberState {
-    int value;
-    int isPrime;
-};
-
 void* allocateMemory(size_t size);
-void populateArrayAscendingly(int minValue, int maxValue, PrimeNumberState* array);
-void printArray(PrimeNumberState* array, int size);
+void populateArrayAscendingly(int* array, int n);
+void printArray(int* array, int size, int* outputArray);
 
-void findTwinPrimeNumbers(PrimeNumberState* array, int size);
+void SieveOfEratosthenes(int n)
+{
+    int* prime = allocateMemory(sizeof(int) * (n + 1));
+    for (int i = 0; i <= n; i++)
+        prime[i] = 1;
+
+    for (int p = 2; p * p <= n; p++) {
+        if (prime[p] == 1) {
+            for (int i = p * p; i <= n; i += p)
+                prime[i] = 0;
+        }
+    }
+
+    for (int p = 2; p <= n; p++)
+        if (prime[p])
+            printf("%d ",p);
+}
 
 int main(int argc, char* argv[]) {
-    struct PrimeNumberState* array = allocateMemory((MAX_VALUE - MIN_VALUE) * sizeof(PrimeNumberState));
-    populateArrayAscendingly(MIN_VALUE, MAX_VALUE, array);
+//    int* array = allocateMemory(sizeof(int) * MAX_VALUE);
+//    int* outputArray = allocateMemory(sizeof(int) * MAX_VALUE);
+//
+//    populateArrayAscendingly(array, MAX_VALUE);
+//
+//    for (int i = 0; i < MAX_VALUE; i++)
+//    {
+//        outputArray[i] = 1;
+//    }
+//
+//    SieveOfEratosthenes(array, MAX_VALUE, outputArray);
+//
+//    printArray(array, MAX_VALUE, outputArray);
+//
+//    int i;
+//    int count = 0;
+//    for (i = 0; i < MAX_VALUE; i++)
+//    {
+//        if (array[i] == 1)
+//        {
+//            count++;
+//        }
+//    }
+//    printf("There are %d prime numbers between %d and %d", count, MAX_VALUE);
+//
+//    free(array);
 
-    findTwinPrimeNumbers(array, MAX_VALUE - MIN_VALUE);
-
-    printArray(array, MAX_VALUE - MIN_VALUE);
-
-    free(array);
+    SieveOfEratosthenes(MAX_VALUE);
     return 0;
 }
 
@@ -39,45 +70,19 @@ void* allocateMemory(size_t size) {
     return memory;
 }
 
-void populateArrayAscendingly(int minValue, int maxValue, PrimeNumberState* array) {
+void populateArrayAscendingly(int* array, int n) {
     int i;
-    for (i = 0; i + minValue < maxValue; i++)
+    for (i = 0; i < n; i++)
     {
-        array[i].value = i + minValue;
-        array[i].isPrime = 1;
+        array[i] = i;
     }
 }
 
-void printArray(PrimeNumberState* array, int size) {
+void printArray(int* array, int size, int* outputArray) {
     int i;
     for (i = 0; i < size; i++)
     {
-        printf("%d is prime : %d\n", array[i].value, array[i].isPrime);
+        printf("%d is prime : %d\n", array[i], outputArray[i]);
     }
     printf("\n");
-}
-
-void findTwinPrimeNumbers(PrimeNumberState* array, int size) {
-    int i = 0;
-    for (i = 0; i < size; i++)
-    {
-        if (array[i].value % 2 == 0)
-        {
-            array[i].isPrime = 0;
-        }
-    }
-
-    //    int k = array[0].value;
-    //    while (k * k <= size)
-    //    {
-    //        int j;
-    //        for (j = 0; j < size; j++)
-    //        {
-    //            if (array[j].value % k == 0 && array[j].value != k)
-    //            {
-    //                array[j].isPrime = 0;
-    //            }
-    //        }
-    //        k++;
-    //    }
 }
