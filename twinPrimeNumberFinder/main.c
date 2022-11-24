@@ -12,73 +12,6 @@ void printArray(int* array, int size, int* outputArray);
 
 void siegeOfEratosthenes();
 
-// void SieveOfEratosthenes(int n) {
-//     int* prime = allocateMemory(sizeof(int) * (n + 1));
-//     for (int i = 0; i <= n; i++)
-//         prime[i] = 1;
-//
-//     for (int p = 2; p * p <= n; p++)
-//     {
-//         if (prime[p] == 1)
-//         {
-//             for (int i = p * p; i <= n; i += p)
-//                 prime[i] = 0;
-//         }
-//     }
-//
-//     for (int p = 2; p <= n; p++)
-//         if (prime[p])
-//             printf("%d ", p);
-// }
-
-void siegeOfEratosthenes() {
-    int n = 100;
-    int* array = allocateMemory(sizeof(int) * n);
-    int* outputArray = allocateMemory(sizeof(int) * n);
-
-    for (int i = 0; i < n; i++)
-    {
-        array[i] = i;
-        outputArray[i] = 1;
-    }
-
-    int k = 2;
-    while (k * k <= n)
-    {
-        for (int i = k * k; i <= n; i += k)
-        {
-            outputArray[i] = 0;
-        }
-        for (int i = k + 1; i <= n; i++)
-        {
-            if (outputArray[i] == 1)
-            {
-                k = i;
-                break;
-            }
-        }
-        //            k++;
-    }
-
-    for (int i = 0; i < n; i++)
-    {
-        if (outputArray[i] == 1)
-        {
-            printf("%d ", array[i]);
-        }
-    }
-
-    int count = 0;
-    for (int i = 0; i < n; i++)
-    {
-        if (outputArray[i] == 1)
-        {
-            count++;
-        }
-    }
-    printf("There are %d prime numbers between 0 and %d", count, n);
-}
-
 int main(int argc, char* argv[]) {
     //    int* array = allocateMemory(sizeof(int) * MAX_VALUE);
     //    int* outputArray = allocateMemory(sizeof(int) * MAX_VALUE);
@@ -137,4 +70,52 @@ void printArray(int* array, int size, int* outputArray) {
         printf("%d is prime : %d\n", array[i], outputArray[i]);
     }
     printf("\n");
+}
+
+void siegeOfEratosthenes() {
+    int n = 1000;
+    int* array = allocateMemory(sizeof(int) * n);
+    int* outputArray = allocateMemory(sizeof(int) * n);
+
+    for (int i = 0; i < n; i++)
+    {
+        array[i] = i;
+        outputArray[i] = 1;
+    }
+
+    int k = 2;
+    while (k * k <= n)
+    {
+        for (int i = k * k; i <= n; i += k)
+        {
+            outputArray[i] = 0;
+        }
+        //        for (int i = k + 1; i <= n; i++)
+        //        {
+        //            if (outputArray[i] == 1)
+        //            {
+        //                k = i;
+        //                break;
+        //            }
+        //        }
+        k++;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        if (outputArray[i] == 1)
+        {
+            printf("%d ", array[i]);
+        }
+    }
+
+    int count = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (outputArray[i] == 1)
+        {
+            count++;
+        }
+    }
+    printf("There are %d prime numbers between 0 and %d", count, n);
 }
