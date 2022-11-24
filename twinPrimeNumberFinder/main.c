@@ -7,41 +7,17 @@
 //#define MAX_VALUE 100
 
 void* allocateMemory(size_t size);
-void populateAscendingArray(int* array, int n);
+// void populateAscendingArray(int* array, int n);
+void populateArray(int* array, int n, int* outputArray);
 void printArray(int* array, int size, int* outputArray);
+void printPrimeNumbers(int* array, int n, int* outputArray);
 
-void siegeOfEratosthenes();
+void siegeOfEratosthenesV1();
+void siegeOfEratosthenesV2();
 
 int main(int argc, char* argv[]) {
-    //    int* array = allocateMemory(sizeof(int) * MAX_VALUE);
-    //    int* outputArray = allocateMemory(sizeof(int) * MAX_VALUE);
-    //
-    //    populateArrayAscendingly(array, MAX_VALUE);
-    //
-    //    for (int i = 0; i < MAX_VALUE; i++)
-    //    {
-    //        outputArray[i] = 1;
-    //    }
-    //
-    //    SieveOfEratosthenes(array, MAX_VALUE, outputArray);
-    //
-    //    printArray(array, MAX_VALUE, outputArray);
-    //
-    //    int i;
-    //    int count = 0;
-    //    for (i = 0; i < MAX_VALUE; i++)
-    //    {
-    //        if (array[i] == 1)
-    //        {
-    //            count++;
-    //        }
-    //    }
-    //    printf("There are %d prime numbers between %d and %d", count, MAX_VALUE);
-    //
-    //    free(array);
-
-    //    SieveOfEratosthenes(MAX_VALUE);
-    siegeOfEratosthenes();
+    siegeOfEratosthenesV1();
+    siegeOfEratosthenesV2();
     return 0;
 }
 
@@ -55,13 +31,13 @@ void* allocateMemory(size_t size) {
     return memory;
 }
 
-void populateAscendingArray(int* array, int n) {
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        array[i] = i;
-    }
-}
+// void populateAscendingArray(int* array, int n) {
+//     int i;
+//     for (i = 0; i < n; i++)
+//     {
+//         array[i] = i;
+//     }
+// }
 
 void printArray(int* array, int size, int* outputArray) {
     int i;
@@ -72,34 +48,20 @@ void printArray(int* array, int size, int* outputArray) {
     printf("\n");
 }
 
-void siegeOfEratosthenes() {
-    int n = 1000;
-    int* array = allocateMemory(sizeof(int) * n);
-    int* outputArray = allocateMemory(sizeof(int) * n);
-
-    for (int i = 0; i < n; i++)
+void populateArray(int* array, int n, int* outputArray) {
+    int i;
+    for (i = 0; i < n; i++)
     {
         array[i] = i;
-        outputArray[i] = 1;
     }
 
-    int k = 2;
-    while (k * k <= n)
+    for (i = 0; i < n; i++)
     {
-        for (int i = k * k; i <= n; i += k)
-        {
-            outputArray[i] = 0;
-        }
-        //        for (int i = k + 1; i <= n; i++)
-        //        {
-        //            if (outputArray[i] == 1)
-        //            {
-        //                k = i;
-        //                break;
-        //            }
-        //        }
-        k++;
+        outputArray[i] = 1;
     }
+}
+
+void printPrimeNumbers(int* array, int n, int* outputArray) {
 
     for (int i = 0; i < n; i++)
     {
@@ -118,4 +80,66 @@ void siegeOfEratosthenes() {
         }
     }
     printf("There are %d prime numbers between 0 and %d", count, n);
+}
+
+void siegeOfEratosthenesV1() {
+    int n = 100;
+    int* array = allocateMemory(sizeof(int) * n);
+    int* outputArray = allocateMemory(sizeof(int) * n);
+    populateArray(array, n, outputArray);
+
+    int k = 2;
+    while (k * k <= n)
+    {
+        for (int j = k * k; j < n; j += k)
+        {
+            if (j % k == 0)
+            {
+                outputArray[j] = 0;
+            }
+        }
+        for (int i = k + 1; i < n; i++)
+        {
+            if (outputArray[i] == 1)
+            {
+                k = array[i];
+                break;
+            }
+        }
+    }
+
+    printPrimeNumbers(array, n, outputArray);
+
+    free(array);
+    free(outputArray);
+}
+
+void siegeOfEratosthenesV2() {
+    //    int n = 100;
+    //    int* array = allocateMemory(sizeof(int) * n);
+    //    int* outputArray = allocateMemory(sizeof(int) * n);
+    //    populateArray(array, n, outputArray);
+    //
+    //    int k = 2;
+    //    while (k * k <= n)
+    //    {
+    //        for (int i = k * k; i <= n; i += k)
+    //        {
+    //            outputArray[i] = 0;
+    //        }
+    //        for (int i = k + 1; i <= n; i++)
+    //        {
+    //            if (outputArray[i] == 1)
+    //            {
+    //                k = i;
+    //                break;
+    //            }
+    //        }
+    //        //            k++;
+    //    }
+    //
+    //    printPrimeNumbers(array, n, outputArray);
+    //
+    //    free(array);
+    //    free(outputArray);
 }
