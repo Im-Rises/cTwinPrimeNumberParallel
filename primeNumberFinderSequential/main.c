@@ -16,11 +16,13 @@ void printTwinPrimeNumbers(int* array, int n, const int* outputArray);
 void siegeOfEratosthenesV1();
 void siegeOfEratosthenesV2();
 void siegeOfEratosthenesV3();
+void siegeOfEratosthenesV5(int n);
 
 int main(int argc, char* argv[]) {
-    siegeOfEratosthenesV1();
+    //    siegeOfEratosthenesV1();
     //    siegeOfEratosthenesV2();
     //    siegeOfEratosthenesV3();
+    siegeOfEratosthenesV5(100);
     return 0;
 }
 
@@ -55,7 +57,7 @@ void populateArray(int* array, int n, int* outputArray) {
     int i;
     for (i = 0; i < n; i++)
     {
-        array[i] = i;
+        array[i] = i + 2;
     }
 
     for (i = 0; i < n; i++)
@@ -104,7 +106,7 @@ void siegeOfEratosthenesV1() {
     int* outputArray = allocateMemory(sizeof(int) * n);
     populateArray(array, n, outputArray);
 
-    int k = 2;
+    int k = array[0];
     while (k * k <= n)
     {
         // a) Mark all multiples of k between k^2 and n as non-prime
@@ -175,4 +177,95 @@ void siegeOfEratosthenesV3() {
 
     free(prime);
     free(array);
+}
+
+void siegeOfEratosthenesV4() {
+    int n = 100;
+    int* array = allocateMemory(sizeof(int) * n);
+    int* outputArray = allocateMemory(sizeof(int) * n);
+    populateArray(array, n, outputArray);
+
+    int k = array[0];
+    while (k * k <= n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            if (array[i] % k == 0 && array[i] != k)
+            {
+                outputArray[i] = 0;
+            }
+        }
+        k++;
+    }
+
+    printPrimeNumbers(array, n, outputArray);
+    //    printTwinPrimeNumbers(array, n, outputArray);
+
+    free(array);
+    free(outputArray);
+}
+
+void siegeOfEratosthenesV5(int n) {
+    int* prime = allocateMemory(sizeof(int) * n);
+
+    for (int i = 0; i < n; i++)
+    {
+        prime[i] = 1;
+    }
+
+    prime[0] = 0;
+    prime[1] = 0;
+    int k = 2;
+    while (k * k <= n)
+    {
+        // a) Mark all multiples of k between k^2 and n as non-prime
+        for (int j = k * k; j < n; j += k)
+        {
+            if ((j % k) == 0)
+            {
+                prime[j] = 0;
+            }
+        }
+        // b) Find the smallest number greater than k that is not marked
+        for (int i = k + 1; i < n; i++)
+        {
+            if (prime[i] == 1)
+            {
+                k = i;
+                break;
+            }
+        }
+    }
+
+    int count = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (prime[i] == 1)
+        {
+            count++;
+        }
+    }
+    printf("There are %d prime numbers between 0 and %d\n", count, n);
+
+    printf("The prime numbers are: ");
+    for (int i = 0; i < n; i++)
+    {
+        if (prime[i] == 1)
+        {
+            printf("%d ", i);
+        }
+    }
+    printf("\n");
+
+    printf("The twin prime numbers are: ");
+    for (int i = 0; i < n; i++)
+    {
+        if (prime[i] == 1 && prime[i + 2] == 1)
+        {
+            printf("(%d, %d) ", i, i + 2);
+        }
+    }
+
+
+    free(prime);
 }
