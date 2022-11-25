@@ -4,7 +4,10 @@ set(CMAKE_C_STANDARD 90)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
-project("primeNumberFinder")
+project("primeNumberFinderSequential")
+add_subdirectory(${PROJECT_NAME})
+
+project("primeNumberFinderParallel")
 add_subdirectory(${PROJECT_NAME})
 
 enable_testing()

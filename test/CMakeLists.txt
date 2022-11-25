@@ -1,4 +1,4 @@
-set(SRCS_TEST "primeNumberSequentialTest.c" "primeNumberParallelTest.c")
+set(SRCS_TEST "primeNumberSequentialTest.c" "primeNumberParallelTest.c" "twinPrimeNumberSequentialTest.cpp" "twinPrimeNumberParallelTest.cpp")
 
 set(COMMON_FUNCTIONS_HEADERS)
 set(COMMON_FUNCTIONS_SOURCES)

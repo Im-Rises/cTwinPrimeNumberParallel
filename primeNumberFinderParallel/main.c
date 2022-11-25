@@ -11,6 +11,7 @@ void* allocateMemory(size_t size);
 void populateArray(int* array, int n, int* outputArray);
 void printArray(int* array, int size, int* outputArray);
 void printPrimeNumbers(int* array, int n, int* outputArray);
+void printTwinPrimeNumbers(int* array, int n, const int* outputArray);
 
 void siegeOfEratosthenesV1();
 void siegeOfEratosthenesV2();
@@ -18,8 +19,8 @@ void siegeOfEratosthenesV3();
 
 int main(int argc, char* argv[]) {
     siegeOfEratosthenesV1();
-    siegeOfEratosthenesV2();
-    siegeOfEratosthenesV3();
+    //    siegeOfEratosthenesV2();
+    //    siegeOfEratosthenesV3();
     return 0;
 }
 
@@ -84,6 +85,19 @@ void printPrimeNumbers(int* array, int n, int* outputArray) {
     printf("There are %d prime numbers between 0 and %d\n", count, n);
 }
 
+void printTwinPrimeNumbers(int* array, int n, const int* outputArray) {
+    int count = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (outputArray[i] == 1 && outputArray[i + 2] == 1)
+        {
+            printf("(%d, %d) ", array[i], array[i + 2]);
+            count++;
+        }
+    }
+    printf("There are %d twin prime numbers between 0 and %d\n", count, n);
+}
+
 void siegeOfEratosthenesV1() {
     int n = 100;
     int* array = allocateMemory(sizeof(int) * n);
@@ -113,6 +127,7 @@ void siegeOfEratosthenesV1() {
     }
 
     printPrimeNumbers(array, n, outputArray);
+    printTwinPrimeNumbers(array, n, outputArray);
 
     free(array);
     free(outputArray);
