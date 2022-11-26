@@ -5,10 +5,10 @@ all:
 	$(MAKE) clean
 
 PrimeNumberFinderSequential:
-	gcc PrimeNumberFinderSeq/main.c -o buildMakeFile/PrimeNumberFinderSequential -std=c90 -Wall -O2
+	gcc rimeNumberFinderSeq/main.c -o buildMakeFile/primeNumberFinderSequential -std=c90 -Wall -O2
 
 PrimeNumberFinderParallel:
-	mpicc primeNumberFinderMPI/main.c -o buildMakeFile/primeNumberFinderMPI -std=c90 -Wall -O2
+	mpicc primeNumberFinderMPI/main.c -o buildMakeFile/primeNumberFinderMPI -std=c90 -Wall -O2 -lm
 
 MrProper : clean
 	rm -f buildMakeFile/primeNumberFinder
