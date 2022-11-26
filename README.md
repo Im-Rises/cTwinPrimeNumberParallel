@@ -47,10 +47,14 @@ sudo apt-get install cmake
 cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=g++
 ```
 
-and then
+Once you have installed the required libraries, you can compile the program using the following command:
 
 ```bash
-cmake --build ./build --config release
+cmake -B ./build -DCMAKE_BUILD_TYPE=Release
+```
+
+```bash
+cmake --build ./build --config Release
 ```
 
 ## Documentation
