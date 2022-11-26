@@ -1,10 +1,59 @@
 # cTwinPrimeNumberParallel
 
-Trouver tous les nombres premiers jumeaux
-Vous avez envoyé
-Deux nombres premiers sont jumueaux si la différence entre 2 est 2 comme 3 et 5, 11 et 13
-Vous avez envoyé
-Avec openmp
+This is a simple program that calculates the twin prime numbers in a given range. It uses the parallel programming
+library MPI to parallelize the calculation.
+
+## Compilation
+
+To compile the program, you can use the makefile or the CMakelists.txt file.
+The makefile is for the GNU compiler collection (GCC) and the CMakelists.txt file is for the CMake build system.
+
+### Makefile build
+
+To compile the program using the makefile, first you need to install the GNU compiler collection (GCC) and the MPI
+library.
+Then you can compile the program using the following command:
+
+```bash
+sudo apt-get install gcc
+```
+
+```bash
+sudo apt-get install make
+```
+
+``make
+sudo apt-get install openmpi-bin openmpi-doc libopenmpi-dev
+
+```
+
+Once you have installed the required libraries, you can compile the program using the following command:
+
+``make
+make
+```
+
+### CMake build
+
+To compile the program using the CMake build system, first you need to install the CMake build system and the MPI
+library.
+Then you can compile the program using the following command:
+
+```bash
+sudo apt-get install cmake
+```
+
+```bash
+cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=g++
+```
+
+and then
+
+```bash
+cmake --build ./build --config release
+```
+
+## Documentation
 
 Sieve of Eratosthenes:  
 <https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes>
@@ -12,4 +61,11 @@ Sieve of Eratosthenes:
 MPI Hello World:
 <https://mpitutorial.com/tutorials/mpi-hello-world/>
 
-sudo apt-get install openmpi-bin openmpi-doc libopenmpi-dev
+## Contributors
+
+Quentin MOREL:
+
+- @Im-Rises
+- <https://github.com/Im-Rises>
+
+[![GitHub contributors](https://contrib.rocks/image?repo=Im-Rises/cTwinPrimeNumberParallel)](https://github.com/Im-Rises/cTwinPrimeNumberParallel/graphs/contributors)
