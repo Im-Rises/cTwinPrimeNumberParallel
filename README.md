@@ -8,3 +8,5 @@ Avec openmp
 
 Sieve of Eratosthenes:  
 <https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes>
+
+sudo apt-get install openmpi-bin openmpi-doc libopenmpi-dev

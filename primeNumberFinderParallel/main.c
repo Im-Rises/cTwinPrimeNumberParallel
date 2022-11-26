@@ -1,119 +1,82 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <string.h>
+#include <mpi.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "MyMPI.h"
 
-#define MAX_VALUE 100
-
-#define BLOCK_LOW(id, p, n) ((i) * (n) / (p))
-#define BLOCK_HIGH(id, p, n) (BLOCK_LOW((id) + 1, p, n) - 1)
-#define BLOCK_SIZE(id, p, n) (BLOCK_LOW((id) + 1) - BLOCK_LOW(id))
-#define BLOCK_OWNER(index, p, n) (((p)*(index)+1)-1)/(n))
-
-void siegeOfEratosthenes(int n);
-void* allocateMemory(size_t size);
-void populateArray(int* array, int n);
-// void printArray(int* array, int size);
-void printPrimeNumbers(int* array, int n);
-void printTwinPrimeNumbers(int* array, int n);
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 int main(int argc, char* argv[]) {
-    siegeOfEratosthenes(MAX_VALUE);
-    return 0;
-}
-
-void siegeOfEratosthenes(int n) {
-    int* prime = allocateMemory(sizeof(int) * n);
-    populateArray(prime, n);
-
-    int k = 2;
-    while (k * k <= n)
+    MPI_Init(&argc, &argv);
+    MPI_Barrier(MPI_COMM_WORLD);
+    elapsed_time = -MPI_Wtime();
+    MPI_Comm_rank(MPI_COMM_WORLD, &id);
+    MPI_Comm_size(MPI_COMM_WORLD, &p);
+    if (argc != 2)
     {
-        // a) Mark all multiples of k between k^2 and n as non-prime
-        for (int j = k * k; j < n; j += k)
+        if (!id)
+            printf("Command line: %s <m>\n", argv[0]);
+        MPI_Finalize();
+        exit(1);
+    }
+    n = atoi(argv[1]);
+    low_value = 2 + BLOCK_LOW(id, p, n - 1);
+    high_value = 2 + BLOCK_HIGH(id, p, n - 1);
+    size = BLOCK_SIZE(id, p, n - 1);
+    proc0_size = (n - 1) / p;
+    if ((2 + proc0_size) < (int)sqrt((double)n))
+    {
+        if (!id)
+            printf("Too many processes\n");
+        MPI_Finalize();
+        exit(1);
+    }
+    marked = (char*)malloc(size);
+    if (marked == NULL)
+    {
+        printf("Cannot allocate enough memory\n");
+        MPI_Finalize();
+        exit(1);
+    }
+    for (i = 0; i < size; i++)
+        marked[i] = 0;
+    if (!id)
+        index = 0;
+    prime = 2;
+    do
+    {
+        if (prime * prime > low_value)
+            first = prime * prime - low_value;
+        else
         {
-            if ((j % k) == 0)
-            {
-                prime[j] = 0;
-            }
+            if (!(low_value % prime))
+                first = 0;
+            else
+                first = prime - (low_value % prime);
         }
-        // b) Find the smallest number greater than k that is not marked
-        for (int i = k + 1; i < n; i++)
+        for (i = first; i < size; i += prime)
+            marked[i] = 1;
+        if (!id)
         {
-            if (prime[i] == 1)
-            {
-                k = i;
-                break;
-            }
+            while (marked[++index])
+                ;
+            prime = index + 2;
         }
-    }
-
-    printPrimeNumbers(prime, n);
-    printTwinPrimeNumbers(prime, n);
-
-    free(prime);
-}
-
-void* allocateMemory(size_t size) {
-    void* memory = malloc(size);
-    if (memory == NULL)
-    {
-        fprintf(stderr, "Error allocating memory");
-        exit(2);
-    }
-    return memory;
-}
-
-void populateArray(int* array, int n) {
-    array[0] = 0;
-    array[1] = 0;
-    for (int i = 2; i < n; i++)
-    {
-        array[i] = 1;
-    }
-}
-
-// void printArray(int* array, int size, int* outputArray) {
-//     int i;
-//     for (i = 0; i < size; i++)
-//     {
-//         printf("%d is prime : %d\n", array[i], outputArray[i]);
-//     }
-//     printf("\n");
-// }
-
-void printPrimeNumbers(int* array, int n) {
-    int count = 0;
-    for (int i = 0; i < n; i++)
-    {
-        if (array[i] == 1)
-        {
+        MPI_Bcast(&prime, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    } while (prime * prime <= n);
+    count = 0;
+    for (i = 0; i < size; i++)
+        if (!marked[i])
             count++;
-        }
-    }
-    printf("There are %d prime numbers between 0 and %d\n", count, n);
-
-    printf("The prime numbers are: ");
-    for (int i = 0; i < n; i++)
+    MPI_Reduce(&count, &global_count, 1, MPI_INT, MPI_SUM,
+        0, MPI_COMM_WORLD);
+    elapsed_time += MPI_Wtime();
+    if (!id)
     {
-        if (array[i] == 1)
-        {
-            printf("%d ", i);
-        }
+        printf("%d primes are less than or equal to %d\n",
+            global_count, n);
+        printf("Total elapsed time: %10.6f\n", elapsed_time);
     }
-    printf("\n");
-}
-
-void printTwinPrimeNumbers(int* array, int n) {
-    printf("The twin prime numbers are: ");
-    for (int i = 0; i < n; i++)
-    {
-        if (array[i] == 1 && array[i + 2] == 1)
-        {
-            printf("(%d, %d) ", i, i + 2);
-        }
-    }
-
-    printf("\n");
+    MPI_Finalize();
+    return 0;
 }
