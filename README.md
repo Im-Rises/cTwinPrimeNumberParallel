@@ -9,4 +9,7 @@ Avec openmp
 Sieve of Eratosthenes:  
 <https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes>
 
+MPI Hello World:
+<https://mpitutorial.com/tutorials/mpi-hello-world/>
+
 sudo apt-get install openmpi-bin openmpi-doc libopenmpi-dev
