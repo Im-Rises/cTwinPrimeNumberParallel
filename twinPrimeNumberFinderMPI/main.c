@@ -57,7 +57,6 @@ int main(int argc, char** argv) {
     int index = 0;
     int prime = 0;
     int first = 0;
-    int count = 0;
     int i;
     for (i = 0; i < size; i++)
         marked[i] = 0;
