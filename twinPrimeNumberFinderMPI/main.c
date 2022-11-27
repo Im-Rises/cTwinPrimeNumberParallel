@@ -31,9 +31,9 @@ int main(int argc, char** argv) {
     /* Init variables */
     int n = atoi(argv[1]);
     int global_count = 0;
-    /*    int local_count = 0;*/
+    int local_count = 0;
     int low_value = 2 + BLOCK_LOW(id, p, n - 1);
-    /*    int high_value = 2 + BLOCK_HIGH(id, p, n - 1);*/
+    int high_value = 2 + BLOCK_HIGH(id, p, n - 1);
     int size = BLOCK_SIZE(id, p, n - 1);
     int proc0_size = (n - 1) / p;
     if ((2 + proc0_size) < (int)sqrt((double)n))
@@ -57,10 +57,7 @@ int main(int argc, char** argv) {
     int index = 0;
     int prime = 0;
     int first = 0;
-    int count = 0;
-    /*    int global_sum = 0;*/
-    int i = 0;
-
+    int i;
     for (i = 0; i < size; i++)
         marked[i] = 0;
     if (!id)
@@ -88,16 +85,26 @@ int main(int argc, char** argv) {
         MPI_Bcast(&prime, 1, MPI_INT, 0, MPI_COMM_WORLD);
     } while (prime * prime <= n);
 
-    /* Count primes */
-    count = 0;
+    /* Count twin primes */
     for (i = 0; i < size; i++)
-        if (!marked[i])
-            count++;
-    MPI_Reduce(&count, &global_count, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    {
+        if (marked[i] == 0)
+        {
+            if (i + 2 < size && marked[i + 2] == 0)
+                local_count++;
+        }
+    }
+
+    /* Sum local counts */
+    MPI_Reduce(&local_count, &global_count, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    /* Stop timer */
     elapsed_time += MPI_Wtime();
+
+    /* Print results */
     if (!id)
     {
-        printf("%d primes are less than or equal to %d\n", global_count, n);
+        printf("There are %d twin primes less than or equal to %d\n", global_count, n);
         printf("Total elapsed time: %10.6f\n", elapsed_time);
     }
 

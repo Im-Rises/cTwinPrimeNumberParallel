@@ -7,11 +7,14 @@ set(CMAKE_C_EXTENSIONS OFF)
 project("primeNumberFinderSeq")
 add_subdirectory(${PROJECT_NAME})
 
+project("twinPrimeNumberFinderSeq")
+add_subdirectory(${PROJECT_NAME})
+
 project("primeNumberFinderMPI")
 add_subdirectory(${PROJECT_NAME})
 
-#project("primeNumberFinderOpenMP")
-#add_subdirectory(${PROJECT_NAME})
+project("twinPrimeNumberFinderMPI")
+add_subdirectory(${PROJECT_NAME})
 
 enable_testing()
 add_subdirectory("test")
