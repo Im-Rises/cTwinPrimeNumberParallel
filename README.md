@@ -102,17 +102,33 @@ To use the program, you need to run the executable file and pass the following a
 mpirun -np <number of processes> ./build/cTwinPrimeNumberParallel <upper limit>
 ```
 
+or
+
+```bash
+mpirun -c <number of processes> ./build/cTwinPrimeNumberParallel <upper limit>
+```
+
 The program will calculate the prime numbers in the range [3, upper limit].
 
 The twin prime program will count the number of twin prime numbers in the range [3, upper limit].
+
+> **Note**  
+> I will not explain how to set up the MPI library for multiple processes from different machines.  
+> You can find more information about it in the [MPI documentation](https://www.open-mpi.org/doc/current/).
+> You can also find more information about the MPI library in the [MPI tutorial](https://mpitutorial.com/tutorials/).
+> The program will only work on your local machine if you use the `mpirun` command with a number of core less than or
+> equal to the number of cores of your machine.
 
 ## Documentation
 
 Sieve of Eratosthenes:  
 <https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes>
 
-MPI Hello World:
+MPI Hello World:  
 <https://mpitutorial.com/tutorials/mpi-hello-world/>
+
+MPI website:  
+<https://www.open-mpi.org/>
 
 ## Contributors
 
