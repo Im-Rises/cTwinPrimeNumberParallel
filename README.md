@@ -17,21 +17,44 @@ The algorithm used to calculate the twin prime numbers is the Sieve of Eratosthe
 for finding all prime numbers up to any given limit. It does so by iteratively marking as composite (i.e., not prime)
 the multiples of each prime, starting with the multiples of 2.
 
-### Sieve of Eratosthenes algorithm for prime numbers
+### Sieve of Eratosthenes algorithm
 
 ```algorithm
-
-```
-
-### Sieve of Eratosthenes algorithm for twin prime numbers
-
-```algorithm
-
+1. Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n).
+2. Initially, let p equal 2, the first prime number.
+3. Enumerate the multiples of p by counting in increments of p from 2p to n, and mark them in the list (these will be 2p, 3p, 4p, ...; the p itself should not be marked).
+4. Find the first number greater than p in the list that is not marked. If there was no such number, stop. Otherwise, let p now equal this new number (which is the next prime), and repeat from step 3.
+5. When the algorithm terminates, the numbers remaining not marked in the list are all the primes below n.
 ```
 
 ## Results
 
-PLACEHOLDER
+The results of the program are shown in the following table:
+
+| Number of processes | Time (s) |
+|---------------------|----------|
+| 1                   | 0.000    |
+| 2                   | 0.000    |
+| 4                   | 0.000    |
+| 8                   | 0.000    |
+| 16                  | 0.000    |
+| 32                  | 0.000    |
+| 64                  | 0.000    |
+| 128                 | 0.000    |
+
+<details>
+<summary>Click to see the detailed results</summary>
+| Number of processes | Time (s) |
+| ------------------- | -------- |
+| 1                   | 0.000    |
+| 2                   | 0.000    |
+| 4                   | 0.000    |
+| 8                   | 0.000    |
+| 16                  | 0.000    |
+| 32                  | 0.000    |
+| 64                  | 0.000    |
+| 128                 | 0.000    |
+</details>
 
 ## Quick Start
 
