@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     int global_count = 0;
     int local_count = 0;
     int low_value = 2 + BLOCK_LOW(id, p, n - 1);
-    int high_value = 2 + BLOCK_HIGH(id, p, n - 1);
+    /*    int high_value = 2 + BLOCK_HIGH(id, p, n - 1);*/
     int size = BLOCK_SIZE(id, p, n - 1);
     int proc0_size = (n - 1) / p;
     if ((2 + proc0_size) < (int)sqrt((double)n))
