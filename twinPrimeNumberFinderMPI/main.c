@@ -130,6 +130,8 @@ int main(int argc, char** argv) {
 
     elapsed_time += MPI_Wtime();
 
+    free(marked);
+
     if (!id)
     {
         printf("%d primes are less than or equal to %d\n", global_count, n);
