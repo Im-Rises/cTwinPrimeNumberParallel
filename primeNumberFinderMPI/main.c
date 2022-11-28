@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
     }
 
     /* Allocate memory for sieve */
-    char* marked = (char*)malloc(size);
+    int* marked = (int*)malloc(size * sizeof(int));
     if (marked == NULL)
     {
         printf("Cannot allocate enough memory\n");

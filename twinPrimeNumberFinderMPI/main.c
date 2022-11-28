@@ -20,6 +20,7 @@ int main(int argc, char** argv) {
     int id, p;
     MPI_Comm_rank(MPI_COMM_WORLD, &id);
     MPI_Comm_size(MPI_COMM_WORLD, &p);
+
     if (argc != 2)
     {
         if (!id)
@@ -45,7 +46,7 @@ int main(int argc, char** argv) {
     }
 
     /* Allocate memory for sieve */
-    char* marked = (char*)malloc(size);
+    int* marked = (int*)malloc(size * sizeof(int));
     if (marked == NULL)
     {
         printf("Cannot allocate enough memory\n");
@@ -94,6 +95,27 @@ int main(int argc, char** argv) {
                 local_count++;
         }
     }
+
+    /*    if (id != p - 1)
+        {
+            MPI_Send(&marked[size - 1], 2, MPI_INT, id + 1, 0, MPI_COMM_WORLD);
+            printf("S - Process %d sent %d and %d to process %d\n", id, marked[size - 1], marked[size], id + 1);
+        }
+
+        if (id != 0)
+        {
+            int buffer[2];
+
+            MPI_Recv(buffer, 2, MPI_INT, id - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+            printf("R - Process %d received %d and %d from process %d\n", id, buffer[0], buffer[1], id - 1);
+
+            if (buffer[0] == 0 && marked[size - 1] == 0)
+                local_count++;
+
+            if (buffer[1] == 0 && marked[size] == 0)
+                local_count++;
+        }*/
 
     /* Sum local counts */
     MPI_Reduce(&local_count, &global_count, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
