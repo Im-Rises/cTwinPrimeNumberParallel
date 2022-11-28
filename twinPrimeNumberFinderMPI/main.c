@@ -8,13 +8,6 @@
 #define BLOCK_SIZE(id, p, n) (BLOCK_LOW((id) + 1, p, n) - BLOCK_LOW(id, p, n))
 #define BLOCK_OWNER(index, p, n) (((p)*(index)+1)-1)/(n))
 
-typedef struct MpiMessage MpiMessage;
-struct MpiMessage {
-    int size;
-    int* low_value;
-    int* high_value;
-};
-
 int main(int argc, char** argv) {
     /*Init MPI*/
     MPI_Init(&argc, &argv);
