@@ -3,13 +3,13 @@
 #include <time.h>
 #include <string.h>
 
-void siegeOfEratosthenes(int* array, int n);
+void siegeOfEratosthenes(char* array, int n);
 void* allocateMemory(size_t size);
-void populateArray(int* array, int n);
-void printPrimeNumbersCount(int* array, int n);
-void printPrimeNumbers(int* array, int n);
-void printTwinPrimeNumbersCount(int* array, int n);
-void printTwinPrimeNumbers(int* array, int n);
+void populateArray(char* array, int n);
+void printPrimeNumbersCount(char* array, int n);
+void printPrimeNumbers(char* array, int n);
+void printTwinPrimeNumbersCount(char* array, int n);
+void printTwinPrimeNumbers(char* array, int n);
 
 int main(int argc, char* argv[]) {
     printf("|-----Sieve of Eratosthenes Sequential-----|\n\n");
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 
     /* Init variables */
     int n = atoi(argv[1]);
-    int* array = allocateMemory(sizeof(int) * n);
+    char* array = allocateMemory(sizeof(char) * n);
     populateArray(array, n);
 
     /* Start timer */
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
     free(primes);
 }*/
 
-void siegeOfEratosthenes(int* array, int n) {
+void siegeOfEratosthenes(char* array, int n) {
     populateArray(array, n);
 
     array[0] = 0;
@@ -77,7 +77,6 @@ void siegeOfEratosthenes(int* array, int n) {
     int i, j;
     while (k * k <= n)
     {
-        /*a) Mark all multiples of k between k^2 and n as non-prime*/
         for (j = k * k; j < n; j += k)
         {
             if ((j % k) == 0)
@@ -85,16 +84,8 @@ void siegeOfEratosthenes(int* array, int n) {
                 array[j] = 0;
             }
         }
-
-        /*b) Find the smallest number greater than k that is not marked*/
-        for (i = k + 1; i < n; i++)
-        {
-            if (array[i] == 1)
-            {
-                k = i;
-                break;
-            }
-        }
+        while (array[++k] == 0)
+            ;
     }
 }
 
@@ -108,7 +99,7 @@ void* allocateMemory(size_t size) {
     return memory;
 }
 
-void populateArray(int* array, int n) {
+void populateArray(char* array, int n) {
     int i;
     for (i = 2; i < n; i++)
     {
@@ -116,7 +107,7 @@ void populateArray(int* array, int n) {
     }
 }
 
-void printPrimeNumbersCount(int* array, int n) {
+void printPrimeNumbersCount(char* array, int n) {
     int count = 0;
     int i;
     for (i = 0; i < n; i++)
@@ -129,7 +120,7 @@ void printPrimeNumbersCount(int* array, int n) {
     printf("There are %d prime numbers between 0 and %d\n", count, n);
 }
 
-void printPrimeNumbers(int* array, int n) {
+void printPrimeNumbers(char* array, int n) {
     printf("The prime numbers are: ");
     int i;
     for (i = 0; i < n; i++)
@@ -142,7 +133,7 @@ void printPrimeNumbers(int* array, int n) {
     printf("\n");
 }
 
-void printTwinPrimeNumbersCount(int* array, int n) {
+void printTwinPrimeNumbersCount(char* array, int n) {
     int count = 0;
     int i;
     for (i = 0; i < n; i++)
@@ -156,7 +147,7 @@ void printTwinPrimeNumbersCount(int* array, int n) {
     printf("There are %d twin prime numbers between 0 and %d\n", count, n);
 }
 
-void printTwinPrimeNumbers(int* array, int n) {
+void printTwinPrimeNumbers(char* array, int n) {
     printf("The twin prime numbers are: ");
     int i;
     for (i = 0; i < n; i++)

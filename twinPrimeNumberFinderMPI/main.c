@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <mpi.h>
 #include <math.h>
+#include <time.h>
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
@@ -11,6 +12,8 @@
 #define BLOCK_OWNER(index, p, n) (((p) * ((index) + 1) - 1) / (n))
 
 int main(int argc, char** argv) {
+    printf("|-----Sieve of Eratosthenes Parallel MPI-----|\n\n");
+
     int count = 0;
     double elapsed_time;
     int first;
@@ -30,6 +33,9 @@ int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
 
     MPI_Barrier(MPI_COMM_WORLD);
+
+    /* Start timer */
+    clock_t startClock = clock();
     elapsed_time = -MPI_Wtime();
 
     MPI_Comm_rank(MPI_COMM_WORLD, &id);
@@ -47,6 +53,8 @@ int main(int argc, char** argv) {
 
     n = atoi(argv[1]);
 
+
+
     low_value = 2 + BLOCK_LOW(id, p, n - 1);
     high_value = 2 + BLOCK_HIGH(id, p, n - 1);
     size = BLOCK_SIZE(id, p, n - 1);
@@ -63,7 +71,7 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    marked = (char*)malloc(size);
+    marked = (char*)malloc(size * sizeof(char));
 
     if (marked == NULL)
     {
@@ -128,6 +136,8 @@ int main(int argc, char** argv) {
 
     MPI_Reduce(&count, &global_count, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
+    /* Stop timer */
+    clock_t endClock = clock();
     elapsed_time += MPI_Wtime();
 
     free(marked);
@@ -136,8 +146,11 @@ int main(int argc, char** argv) {
     {
         printf("%d primes are less than or equal to %d\n", global_count, n);
         printf("Total elapsed time: %10.6f\n", elapsed_time);
+        printf("CPU time: %f seconds\n", (double)(endClock - startClock) / CLOCKS_PER_SEC);
     }
 
     MPI_Finalize();
+
+
     return 0;
 }
