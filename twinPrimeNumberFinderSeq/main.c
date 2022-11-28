@@ -13,7 +13,12 @@ void printPrimeNumbers(int* array, int n);
 void printTwinPrimeNumbers(int* array, int n);
 
 int main(int argc, char* argv[]) {
-    siegeOfEratosthenes(MAX_VALUE);
+    if (argc != 2)
+    {
+        printf("Usage: %s <n> where n is the maximum value to search for twin primes", argv[0]);
+        return 1;
+    }
+    siegeOfEratosthenes(atoi(argv[1]));
     return 0;
 }
 
@@ -21,6 +26,8 @@ void siegeOfEratosthenes(int n) {
     int* prime = allocateMemory(sizeof(int) * n);
     populateArray(prime, n);
 
+    prime[0] = 0;
+    prime[1] = 0;
     int k = 2;
     int i, j;
     while (k * k <= n)
@@ -61,8 +68,6 @@ void* allocateMemory(size_t size) {
 }
 
 void populateArray(int* array, int n) {
-    array[0] = 0;
-    array[1] = 0;
     int i;
     for (i = 2; i < n; i++)
     {
