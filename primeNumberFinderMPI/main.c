@@ -95,6 +95,10 @@ int main(int argc, char** argv) {
             count++;
     MPI_Reduce(&count, &global_count, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     elapsed_time += MPI_Wtime();
+
+    /* Free array  */
+    free(marked);
+
     if (!id)
     {
         printf("%d primes are less than or equal to %d\n", global_count, n);
@@ -103,6 +107,10 @@ int main(int argc, char** argv) {
 
     /* Finalize MPI */
     MPI_Finalize();
+
+/*    for (i = 0; i < size; i++)
+        if (!marked[i])
+            printf("%d\n", i + low_value);*/
 
     return 0;
 }

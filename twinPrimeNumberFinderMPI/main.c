@@ -8,6 +8,13 @@
 #define BLOCK_SIZE(id, p, n) (BLOCK_LOW((id) + 1, p, n) - BLOCK_LOW(id, p, n))
 #define BLOCK_OWNER(index, p, n) (((p)*(index)+1)-1)/(n))
 
+typedef struct MpiMessage MpiMessage;
+struct MpiMessage {
+    int size;
+    int* low_value;
+    int* high_value;
+};
+
 int main(int argc, char** argv) {
     /*Init MPI*/
     MPI_Init(&argc, &argv);
@@ -96,6 +103,20 @@ int main(int argc, char** argv) {
         }
     }
 
+    /* Count twin primers between two processes */
+    if (id != p - 1)
+    {
+        MPI_Send(&marked[size - 1], 1, MPI_INT, id + 1, 0, MPI_COMM_WORLD);
+    }
+
+    if (id != 0)
+    {
+        int prev;
+        MPI_Recv(&prev, 1, MPI_INT, id - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        if (prev == 0 && marked[0] == 0)
+            local_count++;
+    }
+
     /*    if (id != p - 1)
         {
             MPI_Send(&marked[size - 1], 2, MPI_INT, id + 1, 0, MPI_COMM_WORLD);
@@ -119,6 +140,9 @@ int main(int argc, char** argv) {
 
     /* Sum local counts */
     MPI_Reduce(&local_count, &global_count, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    /* Free array */
+    free(marked);
 
     /* Stop timer */
     elapsed_time += MPI_Wtime();
