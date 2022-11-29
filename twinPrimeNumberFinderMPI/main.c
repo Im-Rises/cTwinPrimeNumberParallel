@@ -165,6 +165,22 @@ int main(int argc, char** argv) {
            count++;
    }*/
 
+    if (p > 1 && id != p - 1)
+    {
+        MPI_Send(&marked[size - 2], 2, MPI_CHAR, id + 1, 0, MPI_COMM_WORLD);
+    }
+
+    if (id != 0)
+    {
+        char prev[2];
+        MPI_Recv(&prev, 2, MPI_CHAR, id - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        if (prev[0] == 0 && marked[0] == 0)
+            count++;
+        if (prev[1] == 0 && marked[1] == 0)
+            count++;
+    }
+
+
     /* Sum local counts */
     MPI_Reduce(&count, &global_count, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
