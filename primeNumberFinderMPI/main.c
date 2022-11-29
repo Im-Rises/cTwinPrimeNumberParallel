@@ -4,6 +4,8 @@
 #include <math.h>
 #include <time.h>
 
+#define MONOTHREAD_THRESHOLD 1000000
+
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 #define BLOCK_LOW(id, p, n) ((id) * (n) / (p))
@@ -57,7 +59,7 @@ int main(int argc, char** argv) {
 
     n = atoi(argv[1]);
 
-    if (!(sqrt(n) < (float)n / p))
+    if (sqrt(n) >= (double)n / p)
     {
         if (!id)
         {
