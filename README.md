@@ -188,6 +188,9 @@ flawfinder : This workflow will analyze the code to find bugs and potential vuln
 
 Parallel Programming in C with MPI and OpenMP, Second Edition, by Peter Pacheco, 2010, ISBN 978-0-470-66572-1
 
+Code from marius92mc's repository:  
+<https://github.com/marius92mc/sieve-of-eratosthenes-with-MPI>
+
 Sieve of Eratosthenes:  
 <https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes>
 
