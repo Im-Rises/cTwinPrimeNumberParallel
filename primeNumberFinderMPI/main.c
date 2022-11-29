@@ -12,8 +12,6 @@
 #define BLOCK_OWNER(index, p, n) (((p) * ((index) + 1) - 1) / (n))
 
 int main(int argc, char** argv) {
-    printf("|-----Sieve of Eratosthenes Parallel MPI-----|\n\n");
-
     int count = 0;
     double elapsed_time;
     int first;
@@ -41,6 +39,12 @@ int main(int argc, char** argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &id);
     MPI_Comm_size(MPI_COMM_WORLD, &p);
 
+    if (!id)
+    {
+        printf("|-----Sieve of Eratosthenes Parallel MPI-----|\n\n");
+        printf("Started with %d processes\n", p);
+    }
+
     if (argc != 2)
     {
         if (!id)
@@ -53,7 +57,15 @@ int main(int argc, char** argv) {
 
     n = atoi(argv[1]);
 
-
+    if (sqrt(n) >= n / p)
+    {
+        if (!id)
+        {
+            printf("Error : Too many processes\n");
+        }
+        MPI_Finalize();
+        exit(1);
+    }
 
     low_value = 2 + BLOCK_LOW(id, p, n - 1);
     high_value = 2 + BLOCK_HIGH(id, p, n - 1);
@@ -61,15 +73,15 @@ int main(int argc, char** argv) {
 
     proc0_size = (n - 1) / p;
 
-    if ((2 + proc0_size) < (int)sqrt((double)n))
-    {
-        if (!id)
+    /*    if ((2 + proc0_size) < (int)sqrt((double)n))
         {
-            printf("Too many processes\n");
-        }
-        MPI_Finalize();
-        exit(1);
-    }
+            if (!id)
+            {
+                printf("Too many processes\n");
+            }
+            MPI_Finalize();
+            exit(1);
+        }*/
 
     marked = (char*)malloc(size * sizeof(char));
 
@@ -134,6 +146,11 @@ int main(int argc, char** argv) {
         }
     }
 
+    if (!id)
+    {
+        count -= 2;
+    }
+
     MPI_Reduce(&count, &global_count, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
     /* Stop timer */
@@ -150,7 +167,6 @@ int main(int argc, char** argv) {
     }
 
     MPI_Finalize();
-
 
     return 0;
 }

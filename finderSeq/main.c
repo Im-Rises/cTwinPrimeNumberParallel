@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
 
     /* Print results */
     printPrimeNumbersCount(array, n);
-    /*printPrimeNumbers(array, n);*/
+    /*    printPrimeNumbers(array, n);*/
     printTwinPrimeNumbersCount(array, n);
     /*printTwinPrimeNumbers(array, n);*/
     printf("Real time/CPU time: %f seconds\n", (double)(endClock - startClock) / CLOCKS_PER_SEC);
