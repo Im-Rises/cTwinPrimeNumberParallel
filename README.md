@@ -8,8 +8,13 @@
 
 ## Description
 
-This is a simple program that calculates the twin prime numbers in a given range. It uses the parallel programming
+This is a simple program that calculates the prime and twin prime numbers in a given range. It uses the parallel
+programming
 library MPI to parallelize the calculation.
+
+The Prime algorithm is based on the Sieve of Eratosthenes. The original algorithm from Peter Pacheco for its
+book `from Parallel Programming in C with MPI and OpenMP` is modified to work with small ranges and another version to
+work with prime numbers.
 
 ## Algorithm
 
@@ -55,7 +60,36 @@ The algorithm is implemented to count the number of prime numbers in a given ran
 
 ## Results
 
-The results of the program are shown in the following table:
+The results of the programs are shown in the following table:
+
+### Prime Number Algorithm
+
+| Number of processes | Time (s) |
+|---------------------|----------|
+| 1                   | 0.000    |
+| 2                   | 0.000    |
+| 4                   | 0.000    |
+| 8                   | 0.000    |
+| 16                  | 0.000    |
+| 32                  | 0.000    |
+| 64                  | 0.000    |
+| 128                 | 0.000    |
+
+<details>
+<summary>Click to see the detailed results</summary>
+| Number of processes | Time (s) |
+| ------------------- | -------- |
+| 1                   | 0.000    |
+| 2                   | 0.000    |
+| 4                   | 0.000    |
+| 8                   | 0.000    |
+| 16                  | 0.000    |
+| 32                  | 0.000    |
+| 64                  | 0.000    |
+| 128                 | 0.000    |
+</details>
+
+### Twin Prime Number Algorithm
 
 | Number of processes | Time (s) |
 |---------------------|----------|
