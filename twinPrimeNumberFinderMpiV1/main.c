@@ -149,21 +149,6 @@ int main(int argc, char** argv) {
                 count++;
         }
     }
-    /*
-     */
-    /* Count twin primers between two processes */ /*
-   if (id != p - 1)
-   {
-       MPI_Send(&marked[size - 1], 1, MPI_INT, id + 1, 0, MPI_COMM_WORLD);
-   }
-
-   if (id != 0)
-   {
-       int prev;
-       MPI_Recv(&prev, 1, MPI_INT, id - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-       if (prev == 0 && marked[0] == 0)
-           count++;
-   }*/
 
     if (p > 1 && id != p - 1)
     {

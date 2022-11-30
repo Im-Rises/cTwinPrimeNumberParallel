@@ -120,6 +120,67 @@ The results of the programs are shown in the following table:
 
 PLACEHOLDER
 
+## Project Architecture
+
+~~~
+ParticleEngine
+├── .github
+|  ├── labels.yml
+|  ├── release.yml
+│  ├── workflows
+│  │   |── cmake.yml
+│  │   |── codeql.yml
+│  │   |── cpp-cmake-publish.yml
+│  │   |── cpp-linter.yml
+│  │   |── dependency-review.yml
+│  │   |── flawfinder.yml
+│  │   |── greetings.yml
+│  │   |── label.yml
+│  │   |── msvc.yml
+│  │   |── stale.yml
+├── dependencies
+|  ├── glad
+|  ├── glfw
+|  ├── glfwglm
+|  ├── imgui
+|  ├── stb
+├── ParticleEngine
+│  │   |── *
+|  ├── Particle
+│  │   |── *
+|  ├── Scene
+│  │   |── *
+|  ├── CMakeLists.txt
+|  ├── InputManager.cpp
+|  ├── InputManager.h
+|  ├── main.cpp
+|  ├── ParticleEngine.cpp
+|  ├── ParticleEngine.h
+├── test
+|  ├── TestParticle
+│  │   |── *
+|  ├── CMakeLists.txt
+|  ├── integratorTest.cpp
+|  ├── physicHandlerTest.cpp
+|  ├── particleTest.cpp
+├── .clang-format
+├── .editorconfig
+├── .gitattributes
+├── .gitignore
+├── CMakelists.txt
+├── CMakePresets.json
+├── CMakeSettings.json
+├── imgui.ini
+├── README.md
+~~~
+
+## Dependencies
+
+- C90 compiler
+- CMake
+- Makefile
+- OpenMPI
+
 ## Compilation
 
 To compile the program, you can use the makefile or the CMakelists.txt file.
