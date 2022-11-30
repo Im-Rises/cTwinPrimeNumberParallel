@@ -10,7 +10,7 @@ set(CMAKE_C_EXTENSIONS OFF)
 project("finderSeq")
 add_subdirectory(${PROJECT_NAME})
 
-project("primeNumberFinderMp")
+project("primeNumberFinderMpi")
 add_subdirectory(${PROJECT_NAME})
 
 project("twinPrimeNumberFinderMpiV1")
