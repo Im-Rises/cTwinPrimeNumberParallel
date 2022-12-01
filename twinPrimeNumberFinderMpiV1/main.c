@@ -30,7 +30,9 @@ int main(int argc, char** argv) {
     int prime;
     int size;
 
-    MPI_Init(&argc, &argv);
+    /*MPI_Init(&argc, &argv);*/
+    int provided;
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &provided);
 
     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -80,7 +82,8 @@ int main(int argc, char** argv) {
 
             MPI_Finalize();
             exit(1);
-        }*/
+        }
+    */
 
     low_value = 2 + BLOCK_LOW(id, p, n - 1);
     /*    high_value = 2 + BLOCK_HIGH(id, p, n - 1);*/

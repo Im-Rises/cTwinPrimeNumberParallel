@@ -28,10 +28,8 @@ processesNumberList=(1 2 4 6)
 # Run the executables
 for nValue in "${nValues[@]}"; do
     for processNumber in "${processesNumberList[@]}"; do
-#        echo "Running twin primes finder with $processNumber processes with a value n = $nValue"
         for twinPrimeExeName in "${twinPrimeFinderExeNames[@]}"; do
-            echo "Running $twinPrimeExeName with $processNumber processes on array of size $nValue"
-#            eval "./${buildPath}${twinPrimeExeName} < ${speedTestArraysPath}array_${nValue}.txt > ./${outputsPath}${twinPrimeExeName}_${nValue}_${processNumber}.txt $processNumber"
+            echo "Running $twinPrimeExeName with $processNumber processes with a value n = $nValue"
             eval "mpirun -c $processNumber ./${buildPath}${twinPrimeExeName} $nValue"
         done
     done
