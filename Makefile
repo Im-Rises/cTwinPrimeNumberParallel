@@ -2,7 +2,8 @@ all:
 	$(MAKE) MrProper
 	$(MAKE) FinderSequential
 	$(MAKE) PrimeNumberFinderParallel
-	$(MAKE) TwinPrimeNumberFinderParallel
+	$(MAKE) TwinPrimeNumberFinderParallelV1
+	$(MAKE) TwinPrimeNumberFinderParallelV2
 	$(MAKE) clean
 
 FinderSequential:
@@ -11,8 +12,11 @@ FinderSequential:
 PrimeNumberFinderParallel:
 	mpicc primeNumberFinderMPI/main.c -o buildMakeFile/primeNumberFinderMPI -std=c90 -Wall -O2 -lm
 
-TwinPrimeNumberFinderParallel:
-	mpicc twinPrimeNumberFinderMPI/main.c -o buildMakeFile/twinPrimeNumberFinderMPI -std=c90 -Wall -O2 -lm
+TwinPrimeNumberFinderParallelV1:
+	mpicc twinPrimeNumberFinderMpiV1/main.c -o buildMakeFile/twinPrimeNumberFinderMpiV1 -std=c90 -Wall -O2 -lm
+
+TwinPrimeNumberFinderParallelV2:
+	mpicc twinPrimeNumberFinderMpiV2/main.c -o buildMakeFile/twinPrimeNumberFinderMpiV2 -std=c90 -Wall -O2 -lm
 
 MrProper : clean
 	rm -f buildMakeFile/primeNumberFinderSequential
