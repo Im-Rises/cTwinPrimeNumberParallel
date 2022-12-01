@@ -69,18 +69,18 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    if (p != 1 && n < MONOTHREAD_THRESHOLD)
-    {
-        if (!id)
+    /*    if (p != 1 && n < MONOTHREAD_THRESHOLD)
         {
-            printf("Error : n is too small for the number of requested processes: %d\n", p);
-            printf("- n must be greater than %d or the number of processes must be 1 bellow n = %d\n", MONOTHREAD_THRESHOLD, MONOTHREAD_THRESHOLD);
-            printf("- Use the sequential version instead:\n    mpirun -c 1 %s <value of n>\n", argv[0]);
-        }
+            if (!id)
+            {
+                printf("Error : n is too small for the number of requested processes: %d\n", p);
+                printf("- n must be greater than %d or the number of processes must be 1 bellow n = %d\n", MONOTHREAD_THRESHOLD, MONOTHREAD_THRESHOLD);
+                printf("- Use the sequential version instead:\n    mpirun -c 1 %s <value of n>\n", argv[0]);
+            }
 
-        MPI_Finalize();
-        exit(1);
-    }
+            MPI_Finalize();
+            exit(1);
+        }*/
 
     low_value = 2 + BLOCK_LOW(id, p, n - 1);
     /*    high_value = 2 + BLOCK_HIGH(id, p, n - 1);*/

@@ -139,7 +139,8 @@ int main(int argc, char** argv) {
         MPI_Bcast(&prime, 1, MPI_INT, 0, MPI_COMM_WORLD);
     } while (prime * prime <= n);
 
-    /* Count twin primes */
+    /*Todo:*/
+    /* Count twin primes (use Get instead!!!)*/
     count = 0;
     for (i = 0; i < size; i++)
     {
