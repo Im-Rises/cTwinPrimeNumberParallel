@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     double elapsed_time;
     int first;
     int global_count = 0;
-    int high_value;
+    /*    int high_value;*/
     int i;
     int id;
     int index;
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     char* marked;
     int n;
     int p;
-    int proc0_size;
+    /*    int proc0_size;*/
     int prime;
     int size;
 
@@ -69,13 +69,27 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
+    if (p != 1 && n < MONOTHREAD_THRESHOLD)
+    {
+        if (!id)
+        {
+            printf("Error : n is too small for the number of requested processes: %d\n", p);
+            printf("- n must be greater than %d or the number of processes must be 1 bellow n = %d\n", MONOTHREAD_THRESHOLD, MONOTHREAD_THRESHOLD);
+            printf("- Use the sequential version instead:\n    mpirun -c 1 %s <value of n>\n", argv[0]);
+        }
+
+        MPI_Finalize();
+        exit(1);
+    }
+
     low_value = 2 + BLOCK_LOW(id, p, n - 1);
-    high_value = 2 + BLOCK_HIGH(id, p, n - 1);
+    /*    high_value = 2 + BLOCK_HIGH(id, p, n - 1);*/
     size = BLOCK_SIZE(id, p, n - 1);
 
+    /*
     proc0_size = (n - 1) / p;
 
-    /*    if ((2 + proc0_size) < (int)sqrt((double)n))
+    if ((2 + proc0_size) < (int)sqrt((double)n))
         {
             if (!id)
             {
@@ -83,7 +97,8 @@ int main(int argc, char** argv) {
             }
             MPI_Finalize();
             exit(1);
-        }*/
+        }
+    */
 
     marked = (char*)malloc(size * sizeof(char));
 
