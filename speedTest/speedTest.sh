@@ -15,24 +15,26 @@ buildPath="../buildMakeFile/"
 twinPrimeFinderExeNames=("twinPrimeNumberFinderMpiV1" "twinPrimeNumberFinderMpiV2")
 
 # Generate the list of n values
-#nValues=()
-#for (( i=0; i<$iteration; i++ )); do
-#    nValues+=($nInitValue)
-#    nInitValue=$(($nInitValue*$multiplier))
-#done
+nValues=()
+for (( i=0; i<$iteration; i++ )); do
+    nValues+=($nInitValue)
+    nInitValue=$(($nInitValue*$multiplier))
+done
 
 # Generate threads number list
-processesNumberList=(1 2 4 8 16 24 48 64)
+#processesNumberList=(1 2 4 8 16 24 48 64)
+processesNumberList=(1 2 4 6)
 
 # Run the executables
-for arraySize in "${arraySizeList[@]}"; do
+for nValue in "${nValues[@]}"; do
     for processNumber in "${processesNumberList[@]}"; do
-        echo "Running twin primes finder with $processNumber processes with a value n = $arraySize"
-        for mergeSortExeName in "${twinPrimeFinderExeNames[@]}"; do
-#            echo "Running $mergeSortExeName with $processNumber processes on array of size $arraySize"
-#            eval "./${buildPath}${mergeSortExeName} < ${speedTestArraysPath}array_${arraySize}.txt > ./${outputsPath}${mergeSortExeName}_${arraySize}_${processNumber}.txt $processNumber"
+#        echo "Running twin primes finder with $processNumber processes with a value n = $nValue"
+        for twinPrimeExeName in "${twinPrimeFinderExeNames[@]}"; do
+            echo "Running $twinPrimeExeName with $processNumber processes on array of size $nValue"
+#            eval "./${buildPath}${twinPrimeExeName} < ${speedTestArraysPath}array_${nValue}.txt > ./${outputsPath}${twinPrimeExeName}_${nValue}_${processNumber}.txt $processNumber"
+            eval "mpirun -c $processNumber ./${buildPath}${twinPrimeExeName} $nValue"
         done
     done
 done
 
-echo "Done: outputs written in $outputsPath"
+echo "Done"
