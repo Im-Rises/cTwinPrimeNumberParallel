@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <mpi.h>
 #include <math.h>
-#include <time.h>
 
 #define MONOTHREAD_THRESHOLD 1000000
 
@@ -37,7 +36,6 @@ int main(int argc, char** argv) {
     MPI_Barrier(MPI_COMM_WORLD);
 
     /* Start timer */
-    clock_t startClock = clock();
     elapsed_time = -MPI_Wtime();
 
     MPI_Comm_rank(MPI_COMM_WORLD, &id);
@@ -168,6 +166,7 @@ int main(int argc, char** argv) {
         }
     }
 
+    /* Count twin primes between threads*/
     if (p > 1 && id != p - 1)
     {
         MPI_Send(&marked[size - 2], 2, MPI_CHAR, id + 1, 0, MPI_COMM_WORLD);

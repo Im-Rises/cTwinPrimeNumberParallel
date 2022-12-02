@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <mpi.h>
 #include <math.h>
-#include <time.h>
 
 #define MONOTHREAD_THRESHOLD 1000000
 
@@ -37,7 +36,6 @@ int main(int argc, char** argv) {
     MPI_Barrier(MPI_COMM_WORLD);
 
     /* Start timer */
-    clock_t startClock = clock();
     elapsed_time = -MPI_Wtime();
 
     MPI_Comm_rank(MPI_COMM_WORLD, &id);
@@ -71,37 +69,10 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    /*    if (p != 1 && n < MONOTHREAD_THRESHOLD)
-        {
-            if (!id)
-            {
-                printf("Error : n is too small for the number of requested processes: %d\n", p);
-                printf("- n must be greater than %d or the number of processes must be 1 bellow n = %d\n", MONOTHREAD_THRESHOLD, MONOTHREAD_THRESHOLD);
-                printf("- Use the sequential version instead:\n    mpirun -c 1 %s <value of n>\n", argv[0]);
-            }
-
-            MPI_Finalize();
-            exit(1);
-        }
-    */
 
     low_value = 2 + BLOCK_LOW(id, p, n - 1);
     /*    high_value = 2 + BLOCK_HIGH(id, p, n - 1);*/
     size = BLOCK_SIZE(id, p, n - 1);
-
-    /*
-    proc0_size = (n - 1) / p;
-
-    if ((2 + proc0_size) < (int)sqrt((double)n))
-        {
-            if (!id)
-            {
-                printf("Too many processes\n");
-            }
-            MPI_Finalize();
-            exit(1);
-        }
-    */
 
     marked = (char*)malloc(size * sizeof(char));
 
@@ -111,6 +82,23 @@ int main(int argc, char** argv) {
         MPI_Finalize();
         exit(1);
     }
+
+    /* Create window */
+    if (MPI_Alloc_mem(size * sizeof(char), MPI_INFO_NULL, &marked) != MPI_SUCCESS)
+    {
+        printf("Cannot allocate memory for RMA\n");
+        MPI_Finalize();
+        exit(1);
+    }
+
+    MPI_Win win;
+    if (MPI_Win_create(marked, size * sizeof(char), sizeof(char), MPI_INFO_NULL, MPI_COMM_WORLD, &win) != MPI_SUCCESS)
+    {
+        printf("Cannot create window for RMA\n");
+        MPI_Finalize();
+        exit(1);
+    }
+    MPI_Win_fence(0, win);
 
     for (i = 0; i < size; i++)
     {
@@ -168,19 +156,29 @@ int main(int argc, char** argv) {
         }
     }
 
-    /* Todo: Replace with MPI_Get*/
-    if (p > 1 && id != p - 1)
-    {
-        MPI_Send(&marked[size - 2], 2, MPI_CHAR, id + 1, 0, MPI_COMM_WORLD);
-    }
+    /* Count twin primes between threads*/
+    /*    if (p > 1 && id != p - 1)
+        {
+            MPI_Send(&marked[size - 2], 2, MPI_CHAR, id + 1, 0, MPI_COMM_WORLD);
+        }
+
+        if (id != 0)
+        {
+            char prev[2];
+            MPI_Recv(&prev, 2, MPI_CHAR, id - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            if (prev[0] == 0 && marked[0] == 0)
+                count++;
+            if (prev[1] == 0 && marked[1] == 0)
+                count++;
+        }*/
 
     if (id != 0)
     {
-        char prev[2];
-        MPI_Recv(&prev, 2, MPI_CHAR, id - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        if (prev[0] == 0 && marked[0] == 0)
+        char* buffer;
+        MPI_Get(buffer, 2, MPI_CHAR, id - 1, size - 2, 2, MPI_CHAR, win);
+        if (buffer[0] == 0 && marked[0] == 0)
             count++;
-        if (prev[1] == 0 && marked[1] == 0)
+        if (buffer[1] == 0 && marked[1] == 0)
             count++;
     }
 
@@ -199,6 +197,14 @@ int main(int argc, char** argv) {
     {
         printf("There are %d twin primes less than or equal to %d\n", global_count, n);
         printf("Total elapsed time: %10.6f\n", elapsed_time);
+    }
+
+    /* Free window */
+    if (MPI_Win_free(&win) != MPI_SUCCESS)
+    {
+        printf("Cannot free window\n");
+        MPI_Finalize();
+        exit(1);
     }
 
     /* Finalize MPI */
