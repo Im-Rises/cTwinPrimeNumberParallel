@@ -155,7 +155,7 @@ int main(int argc, char** argv) {
         MPI_Bcast(&prime, 1, MPI_INT, 0, MPI_COMM_WORLD);
     } while (prime * prime <= n);
 
-    /* Count twin primes */
+    /* Count twin primes in process*/
     count = 0;
     for (i = 0; i < size; i++)
     {
@@ -166,7 +166,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    /* Count twin primes between threads*/
+    /* Count twin primes between processes*/
     if (p > 1 && id != p - 1)
     {
         MPI_Send(&marked[size - 2], 2, MPI_CHAR, id + 1, 0, MPI_COMM_WORLD);
