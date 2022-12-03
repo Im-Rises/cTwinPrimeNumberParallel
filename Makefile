@@ -1,7 +1,7 @@
 all:
 	$(MAKE) MrProper
 	$(MAKE) FinderSequential
-#	$(MAKE) PrimeNumberFinderParallel
+	$(MAKE) PrimeNumberFinderParallel
 	$(MAKE) TwinPrimeNumberFinderParallelV1
 	$(MAKE) TwinPrimeNumberFinderParallelV2
 	$(MAKE) clean

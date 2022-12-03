@@ -22,7 +22,6 @@ for (( i=0; i<$iteration; i++ )); do
 done
 
 # Generate threads number list
-#processesNumberList=(1 2 4 8 16 24 48 64)
 processesNumberList=(1 2 4 6)
 
 # Run the executables
