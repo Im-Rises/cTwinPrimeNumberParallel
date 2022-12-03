@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
 
     if (!id)
     {
-        printf("|-----Sieve of Eratosthenes Parallel MPI-----|\n\n");
+        printf("|-----Sieve of Eratosthenes Parallel MPI V1-----|\n\n");
         printf("Started with %d processes\n", p);
     }
 

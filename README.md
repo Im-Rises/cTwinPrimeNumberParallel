@@ -365,6 +365,9 @@ MPI website:
 MPI CMake:  
 <https://cliutils.gitlab.io/modern-cmake/chapters/packages/MPI.html>
 
+hugin:  
+<https://www.hugin.com.au/prime/twin.php>
+
 <!--
 https://github.com/marius92mc/sieve-of-eratosthenes-with-MPI/blob/master/src/eratosthenes_improved.c
 -->

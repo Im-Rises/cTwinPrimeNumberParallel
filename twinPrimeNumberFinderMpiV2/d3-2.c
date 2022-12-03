@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
 
     if (!id)
     {
-        printf("|-----Sieve of Eratosthenes Parallel MPI-----|\n\n");
+        printf("|-----Sieve of Eratosthenes Parallel MPI V2-----|\n\n");
         printf("Started with %d processes\n", p);
     }
 
@@ -157,6 +157,8 @@ int main(int argc, char** argv) {
         }
     }
 
+
+    /* Count twin primes between processes*/
     if (id != 0)
     {
         char prev[2];
