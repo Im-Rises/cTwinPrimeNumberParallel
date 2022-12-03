@@ -1,23 +1,28 @@
 all:
 	$(MAKE) MrProper
-	$(MAKE) PrimeNumberFinderSequential
-	$(MAKE) PrimeNumberFinderParallel
-	$(MAKE) TwinPrimeNumberFinderParallel
+	$(MAKE) FinderSequential
+#	$(MAKE) PrimeNumberFinderParallel
+	$(MAKE) TwinPrimeNumberFinderParallelV1
+	$(MAKE) TwinPrimeNumberFinderParallelV2
 	$(MAKE) clean
 
-PrimeNumberFinderSequential:
-	gcc primeNumberFinderSeq/main.c -o buildMakeFile/primeNumberFinderSequential -std=c90 -Wall -O2
+FinderSequential:
+	gcc finderSeq/main.c -o buildMakeFile/finderSequential -std=c90 -Wall -O2
 
 PrimeNumberFinderParallel:
-	mpicc primeNumberFinderMPI/main.c -o buildMakeFile/primeNumberFinderMPI -std=c90 -Wall -O2 -lm
+	mpicc primeNumberFinderMpi/main.c -o buildMakeFile/primeNumberFinderMpi -std=c90 -Wall -O2 -lm
 
-TwinPrimeNumberFinderParallel:
-	mpicc twinPrimeNumberFinderMPI/main.c -o buildMakeFile/twinPrimeNumberFinderMPI -std=c90 -Wall -O2 -lm
+TwinPrimeNumberFinderParallelV1:
+	mpicc twinPrimeNumberFinderMpiV1/d3-1.c -o buildMakeFile/twinPrimeNumberFinderMpiV1 -std=c90 -Wall -O2 -lm
+
+TwinPrimeNumberFinderParallelV2:
+	mpicc twinPrimeNumberFinderMpiV2/d3-2.c -o buildMakeFile/twinPrimeNumberFinderMpiV2 -std=c90 -Wall -O2 -lm
 
 MrProper : clean
-	rm -f buildMakeFile/primeNumberFinderSequential
-	rm -f buildMakeFile/primeNumberFinderMPI
-	rm -f buildMakeFile/twinPrimeNumberFinderMPI
+	rm -f buildMakeFile/finderSequential
+	rm -f buildMakeFile/primeNumberFinderMpi
+	rm -f buildMakeFile/twinPrimeNumberFinderMpiV1
+	rm -f buildMakeFile/twinPrimeNumberFinderMpiV2
 	$(MAKE) clean
 
 clean :

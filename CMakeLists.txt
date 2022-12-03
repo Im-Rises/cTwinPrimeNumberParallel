@@ -4,16 +4,19 @@ set(CMAKE_C_STANDARD 90)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
-project("primeNumberFinderSeq")
+#project("primeNumberFinderSeq")
+#add_subdirectory(${PROJECT_NAME})
+
+project("finderSeq")
 add_subdirectory(${PROJECT_NAME})
 
-project("twinPrimeNumberFinderSeq")
+project("primeNumberFinderMpi")
 add_subdirectory(${PROJECT_NAME})
 
-project("primeNumberFinderMPI")
+project("twinPrimeNumberFinderMpiV1")
 add_subdirectory(${PROJECT_NAME})
 
-project("twinPrimeNumberFinderMPI")
+project("twinPrimeNumberFinderMpiV2")
 add_subdirectory(${PROJECT_NAME})
 
 enable_testing()

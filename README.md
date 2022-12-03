@@ -2,14 +2,19 @@
 
 <p align="center">
       <img src="https://user-images.githubusercontent.com/59691442/183268126-b3d19e66-8f2d-463a-805e-ae6ef7cc6c01.png" alt="cmakeLogo" style="height:60px;"/>
-      <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="cppLogo" style="height:60px;"/>
+      <img src="https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white" alt="cppLogo" style="height:60px;"/>
       <img src="https://user-images.githubusercontent.com/59691442/204111351-40876ca8-3bb8-49a6-96e2-6aa3bfcc21f4.png" alt="mpiLogo" style="height:60px;"/>
 </p>
 
 ## Description
 
-This is a simple program that calculates the twin prime numbers in a given range. It uses the parallel programming
+This is a simple program that calculates the prime and twin prime numbers in a given range. It uses the parallel
+programming
 library MPI to parallelize the calculation.
+
+The Prime algorithm is based on the Sieve of Eratosthenes. The original algorithm from Peter Pacheco for its
+book `from Parallel Programming in C with MPI and OpenMP` is modified to work with small ranges and another version to
+work with prime numbers.
 
 ## Algorithm
 
@@ -17,25 +22,164 @@ The algorithm used to calculate the twin prime numbers is the Sieve of Eratosthe
 for finding all prime numbers up to any given limit. It does so by iteratively marking as composite (i.e., not prime)
 the multiples of each prime, starting with the multiples of 2.
 
-### Sieve of Eratosthenes algorithm for prime numbers
-
 ```algorithm
-
+1. Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n).
+2. Initially, let p equal 2, the first prime number.
+3. Enumerate the multiples of p by counting in increments of p from 2p to n, and mark them in the list (these will be 2p, 3p, 4p, ...; the p itself should not be marked).
+4. Find the first number greater than p in the list that is not marked. If there was no such number, stop. Otherwise, let p now equal this new number (which is the next prime), and repeat from step 3.
+5. When the algorithm terminates, the numbers remaining not marked in the list are all the primes below n.
 ```
 
-### Sieve of Eratosthenes algorithm for twin prime numbers
+The algorithm is implemented to count the number of prime numbers in a given range.
+
+### Prime Number Sequential Algorithm
 
 ```algorithm
+1. Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n).
+2. Initially, let k equal 2, the first prime number.
+3. Repeat
+   a) Mark all multiples of k between k^2 and n as composite.
+   b) Find the first number greater than k in the list that is not marked. If there was no such number, stop. Otherwise, let k now equal this new number (which is the next prime), and repeat from step 3.
+4. When the algorithm terminates, the numbers remaining not marked in the list are all the primes below n.
+5. Count the number of prime numbers in the list.
+```
 
+### Prime Number Parallel Algorithm
+
+```algorithm
+1. Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n). (Each process creates its share of list)
+2. Initially, let p equal 2, the first prime number. (Each process does this)
+3. Repeat
+   a) Mark all multiples of k between k^2 and n as composite. (Each process marks its share of list)
+   b) Find the first number greater than k in the list that is not marked. If there was no such number, stop. Otherwise, let k now equal this new number (which is the next prime), and repeat from step 3. (Process 0 only)
+   c) Broadcast the new value of k to all processes. (Process 0 only)
+4. Reduction of the list of primes.
+5. When the algorithm terminates, the numbers remaining not marked in the list are all the primes below n.
+6. Count the number of prime numbers in the list.
 ```
 
 ## Results
 
-PLACEHOLDER
+The results of the programs are shown in the following table:
+
+### Prime Number Algorithm
+
+| Number of processes | Time (s) |
+|---------------------|----------|
+| 1                   | 0.000    |
+| 2                   | 0.000    |
+| 4                   | 0.000    |
+| 8                   | 0.000    |
+| 16                  | 0.000    |
+| 32                  | 0.000    |
+| 64                  | 0.000    |
+| 128                 | 0.000    |
+
+<details>
+<summary>Click to see the detailed results</summary>
+| Number of processes | Time (s) |
+| ------------------- | -------- |
+| 1                   | 0.000    |
+| 2                   | 0.000    |
+| 4                   | 0.000    |
+| 8                   | 0.000    |
+| 16                  | 0.000    |
+| 32                  | 0.000    |
+| 64                  | 0.000    |
+| 128                 | 0.000    |
+</details>
+
+### Twin Prime Number Algorithm
+
+| Number of processes | Time (s) |
+|---------------------|----------|
+| 1                   | 0.000    |
+| 2                   | 0.000    |
+| 4                   | 0.000    |
+| 8                   | 0.000    |
+| 16                  | 0.000    |
+| 32                  | 0.000    |
+| 64                  | 0.000    |
+| 128                 | 0.000    |
+
+<details>
+<summary>Click to see the detailed results</summary>
+| Number of processes | Time (s) |
+| ------------------- | -------- |
+| 1                   | 0.000    |
+| 2                   | 0.000    |
+| 4                   | 0.000    |
+| 8                   | 0.000    |
+| 16                  | 0.000    |
+| 32                  | 0.000    |
+| 64                  | 0.000    |
+| 128                 | 0.000    |
+</details>
 
 ## Quick Start
 
 PLACEHOLDER
+
+## Project Architecture
+
+~~~
+ParticleEngine
+├── .github
+|  ├── labels.yml
+|  ├── release.yml
+│  ├── workflows
+│  │   |── cmake.yml
+│  │   |── codeql.yml
+│  │   |── cpp-cmake-publish.yml
+│  │   |── cpp-linter.yml
+│  │   |── dependency-review.yml
+│  │   |── flawfinder.yml
+│  │   |── greetings.yml
+│  │   |── label.yml
+│  │   |── msvc.yml
+│  │   |── stale.yml
+├── dependencies
+|  ├── glad
+|  ├── glfw
+|  ├── glfwglm
+|  ├── imgui
+|  ├── stb
+├── ParticleEngine
+│  │   |── *
+|  ├── Particle
+│  │   |── *
+|  ├── Scene
+│  │   |── *
+|  ├── CMakeLists.txt
+|  ├── InputManager.cpp
+|  ├── InputManager.h
+|  ├── main.cpp
+|  ├── ParticleEngine.cpp
+|  ├── ParticleEngine.h
+├── test
+|  ├── TestParticle
+│  │   |── *
+|  ├── CMakeLists.txt
+|  ├── integratorTest.cpp
+|  ├── physicHandlerTest.cpp
+|  ├── particleTest.cpp
+├── .clang-format
+├── .editorconfig
+├── .gitattributes
+├── .gitignore
+├── CMakelists.txt
+├── CMakePresets.json
+├── CMakeSettings.json
+├── imgui.ini
+├── README.md
+~~~
+
+## Dependencies
+
+- C90 compiler
+- CMake
+- Makefile
+- OpenMPI
 
 ## Compilation
 
@@ -137,6 +281,11 @@ flawfinder : This workflow will analyze the code to find bugs and potential vuln
 
 ## Documentation
 
+Parallel Programming in C with MPI and OpenMP, Second Edition, by Peter Pacheco, 2010, ISBN 978-0-470-66572-1
+
+Code from marius92mc's repository:  
+<https://github.com/marius92mc/sieve-of-eratosthenes-with-MPI>
+
 Sieve of Eratosthenes:  
 <https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes>
 
@@ -145,6 +294,13 @@ MPI Hello World:
 
 MPI website:  
 <https://www.open-mpi.org/>
+
+MPI CMake:  
+<https://cliutils.gitlab.io/modern-cmake/chapters/packages/MPI.html>
+
+<!--
+https://github.com/marius92mc/sieve-of-eratosthenes-with-MPI/blob/master/src/eratosthenes_improved.c
+-->
 
 ## Contributors
 
