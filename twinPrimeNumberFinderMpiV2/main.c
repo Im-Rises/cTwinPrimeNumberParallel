@@ -160,7 +160,6 @@ int main(int argc, char** argv) {
     if (id != 0)
     {
         char prev[2];
-        /*        MPI_Get(buffer, 2, MPI_CHAR, id - 1, size - 2, 2, MPI_CHAR, win);*/
         MPI_Get(prev, 2, MPI_CHAR, id - 1, 0, 2, MPI_CHAR, win);
         if (prev[0] == 0 && marked[0] == 0)
             count++;
