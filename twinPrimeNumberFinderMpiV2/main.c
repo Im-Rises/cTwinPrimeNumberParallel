@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
     }
 
     /* Create window */
-    if (MPI_Alloc_mem(size * sizeof(char), MPI_INFO_NULL, &marked) != MPI_SUCCESS)
+    if (MPI_Alloc_mem(2 * sizeof(char), MPI_INFO_NULL, marked + (size - 2 * sizeof(char))) != MPI_SUCCESS)
     {
         printf("Cannot allocate memory for RMA\n");
         MPI_Finalize();
@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
 
     MPI_Win win;
     /* Share only the end of the marked array (the last tw variables) */
-    if (MPI_Win_create(marked + (size - 2 * sizeof(char)), 2 * sizeof(char), sizeof(char), MPI_INFO_NULL, MPI_COMM_WORLD, &win) != MPI_SUCCESS)
+    if (MPI_Win_create(marked + (size - 2) * sizeof(char), 2 * sizeof(char), sizeof(char), MPI_INFO_NULL, MPI_COMM_WORLD, &win) != MPI_SUCCESS)
     {
         printf("Cannot create window for RMA\n");
         MPI_Finalize();
@@ -167,7 +167,7 @@ int main(int argc, char** argv) {
         if (prev[1] == 0 && marked[1] == 0)
             count++;
     }
-
+    MPI_Win_fence(0, win);
 
     /* Sum local counts */
     MPI_Reduce(&count, &global_count, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
