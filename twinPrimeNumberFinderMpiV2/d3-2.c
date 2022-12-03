@@ -74,25 +74,25 @@ int main(int argc, char** argv) {
     /*    high_value = 2 + BLOCK_HIGH(id, p, n - 1);*/
     size = BLOCK_SIZE(id, p, n - 1);
 
-    marked = (char*)malloc(size * sizeof(char));
+    /* Allocate memory */
+    /*    if (MPI_Alloc_mem(2 * sizeof(char), MPI_INFO_NULL, marked + (size - 2 * sizeof(char))) != MPI_SUCCESS)*/
+    if (MPI_Alloc_mem(size * sizeof(char), MPI_INFO_NULL, &marked) != MPI_SUCCESS)
+    {
+        printf("Cannot allocate memory for RMA\n");
+        MPI_Finalize();
+        exit(1);
+    }
+    /*    marked = (char*)malloc(size * sizeof(char));
 
     if (marked == NULL)
     {
         printf("Cannot allocate enough memory\n");
         MPI_Finalize();
         exit(1);
-    }
+    }*/
 
-    /* Create window */
-    if (MPI_Alloc_mem(2 * sizeof(char), MPI_INFO_NULL, marked + (size - 2 * sizeof(char))) != MPI_SUCCESS)
-    {
-        printf("Cannot allocate memory for RMA\n");
-        MPI_Finalize();
-        exit(1);
-    }
-
+    /* Create window and share only the end of the marked array (the last two variables) */
     MPI_Win win;
-    /* Share only the end of the marked array (the last tw variables) */
     if (MPI_Win_create(marked + (size - 2) * sizeof(char), 2 * sizeof(char), sizeof(char), MPI_INFO_NULL, MPI_COMM_WORLD, &win) != MPI_SUCCESS)
     {
         printf("Cannot create window for RMA\n");
@@ -157,7 +157,6 @@ int main(int argc, char** argv) {
         }
     }
 
-
     /* Count twin primes between processes*/
     MPI_Barrier(MPI_COMM_WORLD);
     if (id != 0)
@@ -175,7 +174,8 @@ int main(int argc, char** argv) {
     MPI_Reduce(&count, &global_count, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
     /* Free array */
-    free(marked);
+    /*    free(marked);*/
+    MPI_Free_mem(marked);
 
     /* Stop timer */
     elapsed_time += MPI_Wtime();
