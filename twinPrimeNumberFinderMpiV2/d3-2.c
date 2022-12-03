@@ -159,6 +159,7 @@ int main(int argc, char** argv) {
 
 
     /* Count twin primes between processes*/
+    MPI_Barrier(MPI_COMM_WORLD);
     if (id != 0)
     {
         char prev[2];
