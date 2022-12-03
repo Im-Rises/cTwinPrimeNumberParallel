@@ -92,6 +92,7 @@ int main(int argc, char** argv) {
     }
 
     MPI_Win win;
+    /* Share only the end of the marked array (the last tw variables) */
     if (MPI_Win_create(marked + (size - 2 * sizeof(char)), 2 * sizeof(char), sizeof(char), MPI_INFO_NULL, MPI_COMM_WORLD, &win) != MPI_SUCCESS)
     {
         printf("Cannot create window for RMA\n");
@@ -155,22 +156,6 @@ int main(int argc, char** argv) {
                 count++;
         }
     }
-
-    /* Count twin primes between threads*/
-    /*    if (p > 1 && id != p - 1)
-        {
-            MPI_Send(&marked[size - 2], 2, MPI_CHAR, id + 1, 0, MPI_COMM_WORLD);
-        }
-
-        if (id != 0)
-        {
-            char prev[2];
-            MPI_Recv(&prev, 2, MPI_CHAR, id - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            if (prev[0] == 0 && marked[0] == 0)
-                count++;
-            if (prev[1] == 0 && marked[1] == 0)
-                count++;
-        }*/
 
     if (id != 0)
     {
