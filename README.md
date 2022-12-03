@@ -16,6 +16,55 @@ The Prime algorithm is based on the Sieve of Eratosthenes. The original algorith
 book `from Parallel Programming in C with MPI and OpenMP` is modified to work with small ranges and another version to
 work with prime numbers.
 
+The implemented algorithm are the following:
+
+- [x] Merge Sort
+- [x] Parallel Merge Sort
+- [x] Parallel Merge Sort using OpenMP
+- [x] Parallel Merge Sort using PThread
+
+## Dependencies
+
+- C90
+- GNU90 (PThread)
+- CMake or Make
+- C90 compiler (GCC, Clang, MSVC, ...)
+
+## Table of Contents
+
+- [Description](#description)
+- [Dependencies](#Dependencies)
+- [Table of Contents](#table-of-contents)
+- [Quickstart](#Quickstart)
+- [Algorithms](#Algorithms)
+    - [Sequential Merge Sort V1](#Sequential-Merge-Sort-V1)
+    - [Sequential Merge Sort V2](#Sequential-Merge-Sort-V2)
+    - [Merge Sort algorithm chosen](#Merge-Sort-algorithm-chosen)
+    - [Parallel Merge Sort](#Parallel-Merge-Sort)
+    - [Details on the implementation](#Details-on-the-implementation)
+- [Details on the implementation](#Details-on-the-implementation)
+    - [Sequential Merge Sort](#Sequential-Merge-Sort)
+    - [Parallel Merge Sort with OpenMP](#Parallel-Merge-Sort-with-OpenMP)
+    - [Parallel Merge Sort with Pthreads](#Parallel-Merge-Sort-with-Pthreads)
+- [Results](#Results)
+- [How to use](#How-to-use)
+- [Speed test](#Speed-test)
+- [Compilation](#Compilation)
+    - [Compilation with CMake](#Compilation-with-CMake)
+        - [Windows](#Windows)
+        - [Linux](#Linux)
+    - [Compile with Make](#Compile-with-Make)
+    - [Setup](#Setup)
+    - [Compilation](#Compilation)
+- [Project Architecture](#Project-Architecture)
+- [GitHub Actions](#GitHub-Actions)
+- [Documentations](#Documentations)
+- [Contributors](#Contributors)
+
+## Quick Start
+
+PLACEHOLDER
+
 ## Algorithm
 
 The algorithm used to calculate the twin prime numbers is the Sieve of Eratosthenes. It is a simple, ancient algorithm
@@ -61,7 +110,7 @@ The algorithm is implemented to count the number of prime numbers in a given ran
 ## Results
 
 The results of the programs are shown in the following table:
-
+<!--
 ### Prime Number Algorithm
 
 | Number of processes | Time (s) |
@@ -88,8 +137,9 @@ The results of the programs are shown in the following table:
 | 64                  | 0.000    |
 | 128                 | 0.000    |
 </details>
+-->
 
-### Twin Prime Number Algorithm
+### Twin Prime Number Algorithm using computer threads
 
 | Number of processes | Time (s) |
 |---------------------|----------|
@@ -116,63 +166,32 @@ The results of the programs are shown in the following table:
 | 128                 | 0.000    |
 </details>
 
-## Quick Start
+### Twin Prime Number Algorithm using multiple computers
 
-PLACEHOLDER
+| Number of processes | Time (s) |
+|---------------------|----------|
+| 1                   | 0.000    |
+| 2                   | 0.000    |
+| 4                   | 0.000    |
+| 8                   | 0.000    |
+| 16                  | 0.000    |
+| 32                  | 0.000    |
+| 64                  | 0.000    |
+| 128                 | 0.000    |
 
-## Project Architecture
-
-~~~
-ParticleEngine
-├── .github
-|  ├── labels.yml
-|  ├── release.yml
-│  ├── workflows
-│  │   |── cmake.yml
-│  │   |── codeql.yml
-│  │   |── cpp-cmake-publish.yml
-│  │   |── cpp-linter.yml
-│  │   |── dependency-review.yml
-│  │   |── flawfinder.yml
-│  │   |── greetings.yml
-│  │   |── label.yml
-│  │   |── msvc.yml
-│  │   |── stale.yml
-├── dependencies
-|  ├── glad
-|  ├── glfw
-|  ├── glfwglm
-|  ├── imgui
-|  ├── stb
-├── ParticleEngine
-│  │   |── *
-|  ├── Particle
-│  │   |── *
-|  ├── Scene
-│  │   |── *
-|  ├── CMakeLists.txt
-|  ├── InputManager.cpp
-|  ├── InputManager.h
-|  ├── main.cpp
-|  ├── ParticleEngine.cpp
-|  ├── ParticleEngine.h
-├── test
-|  ├── TestParticle
-│  │   |── *
-|  ├── CMakeLists.txt
-|  ├── integratorTest.cpp
-|  ├── physicHandlerTest.cpp
-|  ├── particleTest.cpp
-├── .clang-format
-├── .editorconfig
-├── .gitattributes
-├── .gitignore
-├── CMakelists.txt
-├── CMakePresets.json
-├── CMakeSettings.json
-├── imgui.ini
-├── README.md
-~~~
+<details>
+<summary>Click to see the detailed results</summary>
+| Number of processes | Time (s) |
+| ------------------- | -------- |
+| 1                   | 0.000    |
+| 2                   | 0.000    |
+| 4                   | 0.000    |
+| 8                   | 0.000    |
+| 16                  | 0.000    |
+| 32                  | 0.000    |
+| 64                  | 0.000    |
+| 128                 | 0.000    |
+</details>
 
 ## Dependencies
 
@@ -262,6 +281,54 @@ The twin prime program will count the number of twin prime numbers in the range 
 > You can also find more information about the MPI library in the [MPI tutorial](https://mpitutorial.com/tutorials/).
 > The program will only work on your local machine if you use the `mpirun` command with a number of core less than or
 > equal to the number of cores of your machine.
+
+## Project Architecture
+
+~~~
+ParticleEngine
+├── .github
+|  ├── labels.yml
+|  ├── release.yml
+│  ├── workflows
+│  │   |── cmake.yml
+│  │   |── codeql.yml
+│  │   |── cpp-cmake-publish.yml
+│  │   |── cpp-linter.yml
+│  │   |── dependency-review.yml
+│  │   |── flawfinder.yml
+│  │   |── greetings.yml
+│  │   |── label.yml
+│  │   |── msvc.yml
+│  │   |── stale.yml
+├── ParticleEngine
+│  │   |── *
+|  ├── Particle
+│  │   |── *
+|  ├── Scene
+│  │   |── *
+|  ├── CMakeLists.txt
+|  ├── InputManager.cpp
+|  ├── InputManager.h
+|  ├── main.cpp
+|  ├── ParticleEngine.cpp
+|  ├── ParticleEngine.h
+├── test
+|  ├── TestParticle
+│  │   |── *
+|  ├── CMakeLists.txt
+|  ├── integratorTest.cpp
+|  ├── physicHandlerTest.cpp
+|  ├── particleTest.cpp
+├── .clang-format
+├── .editorconfig
+├── .gitattributes
+├── .gitignore
+├── CMakelists.txt
+├── CMakePresets.json
+├── CMakeSettings.json
+├── imgui.ini
+├── README.md
+~~~
 
 ## GitHub Actions
 

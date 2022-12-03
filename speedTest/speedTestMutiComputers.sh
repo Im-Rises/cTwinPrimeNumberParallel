@@ -11,7 +11,7 @@ nMultiplier=$3
 nIteration=$4
 
 nValues=()
-for (( i=0; i<$iteration; i++ )); do
+for (( i=0; i<$nIteration; i++ )); do
     nValues+=($nInitValue)
     nInitValue=$(($nInitValue*$nMultiplier))
 done
