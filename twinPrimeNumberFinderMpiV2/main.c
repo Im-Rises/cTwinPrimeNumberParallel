@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
     }
 
     MPI_Win win;
-    if (MPI_Win_create(marked, size * sizeof(char), sizeof(char), MPI_INFO_NULL, MPI_COMM_WORLD, &win) != MPI_SUCCESS)
+    if (MPI_Win_create(marked + (size - 2 * sizeof(char)), 2 * sizeof(char), sizeof(char), MPI_INFO_NULL, MPI_COMM_WORLD, &win) != MPI_SUCCESS)
     {
         printf("Cannot create window for RMA\n");
         MPI_Finalize();
@@ -174,11 +174,12 @@ int main(int argc, char** argv) {
 
     if (id != 0)
     {
-        char* buffer;
-        MPI_Get(buffer, 2, MPI_CHAR, id - 1, size - 2, 2, MPI_CHAR, win);
-        if (buffer[0] == 0 && marked[0] == 0)
+        char prev[2];
+        /*        MPI_Get(buffer, 2, MPI_CHAR, id - 1, size - 2, 2, MPI_CHAR, win);*/
+        MPI_Get(prev, 2, MPI_CHAR, id - 1, 0, 2, MPI_CHAR, win);
+        if (prev[0] == 0 && marked[0] == 0)
             count++;
-        if (buffer[1] == 0 && marked[1] == 0)
+        if (prev[1] == 0 && marked[1] == 0)
             count++;
     }
 
