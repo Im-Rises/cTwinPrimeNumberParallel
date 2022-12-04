@@ -11,16 +11,15 @@
 This is a simple program that calculates the number of prime and twin prime numbers in a given range.
 It uses the parallel programming library MPI to parallelize the calculation.
 
-The Prime algorithm is based on the Sieve of Eratosthenes. The original algorithm from Peter Pacheco for its
-book `from Parallel Programming in C with MPI and OpenMP` is modified to work with small ranges and another version to
-work with prime numbers.
+The Prime algorithm is based on the Sieve of Eratosthenes. The original Algorithm is based on
+Michael J. Quinn's book `Parallel Programming in C with MPI and OpenMP`.
 
 The implemented algorithm are the following:
 
 - [x] Sequential Sieve of Eratosthenes
 - [x] Parallel Sieve of Eratosthenes
-- [x] Parallel twin prime number finder using MPI_Send and MPI_Recv
-- [x] Parallel twin prime number finder using MPI_Get with windows
+- [x] Parallel twin prime number finder using MPI_Send and MPI_Recv (V1)
+- [x] Parallel twin prime number finder using MPI_Get with windows (V2)
 
 ## Dependencies
 
@@ -58,6 +57,8 @@ system, please follow the instructions in the Compilation section.
 For an explanation on `How to use` go to the according section.
 
 The different algorithms used are described below.
+
+The finderSeq version is composed of the sequential prime number finder and the sequential twin prime number finder.
 
 ## Algorithms
 
@@ -105,8 +106,7 @@ The algorithm is implemented to count the number of prime numbers in a given ran
 
 Each parallel version of the algoithm has been modified to work with small ranges.
 
-The original algorithm from Peter Pacheco for its book `from Parallel Programming in C with MPI and OpenMP` seems to
-have
+The original algorithm from Michael Quinn's book `Parallel Programming in C with MPI and OpenMP` seems to have
 an issue calculating the prime numbers in a range smaller than 10 with 4 processes, it returns 5 prime numbers instead
 of 4.
 The modified algorithm is the following:
@@ -346,10 +346,8 @@ cTwinPrimeNumberParallel
 |  ├── CMakelists.txt
 |  ├── main.c
 ├── test
-|  ├── TestParticle
-│  │   |── *
 |  ├── CMakeLists.txt
-|  ├── main.c
+|  ├── *.c
 ├── TwinPrimeNumberFinderMpiV1
 |  ├── CMakelists.txt
 |  ├── main.c
@@ -386,7 +384,7 @@ flawfinder : This workflow will analyze the code to find bugs and potential vuln
 
 ## Documentation
 
-Parallel Programming in C with MPI and OpenMP, Second Edition, by Peter Pacheco, 2010, ISBN 978-0-470-66572-1
+Parallel Programming in C with MPI and OpenMP, Michael J. Quinn, 2003
 
 Code from marius92mc's repository:  
 <https://github.com/marius92mc/sieve-of-eratosthenes-with-MPI>
@@ -405,10 +403,6 @@ MPI CMake:
 
 hugin:  
 <https://www.hugin.com.au/prime/twin.php>
-
-<!--
-https://github.com/marius92mc/sieve-of-eratosthenes-with-MPI/blob/master/src/eratosthenes_improved.c
--->
 
 ## Contributors
 
