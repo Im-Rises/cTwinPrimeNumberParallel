@@ -32,7 +32,7 @@ int testTwinPrime(const int n, const int expectedResult, const int errorCode) {
 }
 
 int main() {
-    printf("Prime and Twin prime sequential version tests\n");
+    printf("Prime and Twin prime sequential version tests:\n");
     int result = 0;
     result += testPrime(10, 4, 1);
     result += testPrime(100, 25, 2);
