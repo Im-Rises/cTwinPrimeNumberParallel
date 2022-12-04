@@ -8,9 +8,8 @@
 
 ## Description
 
-This is a simple program that calculates the prime and twin prime numbers in a given range. It uses the parallel
-programming
-library MPI to parallelize the calculation.
+This is a simple program that calculates the number of prime and twin prime numbers in a given range.
+It uses the parallel programming library MPI to parallelize the calculation.
 
 The Prime algorithm is based on the Sieve of Eratosthenes. The original algorithm from Peter Pacheco for its
 book `from Parallel Programming in C with MPI and OpenMP` is modified to work with small ranges and another version to
@@ -18,15 +17,14 @@ work with prime numbers.
 
 The implemented algorithm are the following:
 
-- [x] Merge Sort
-- [x] Parallel Merge Sort
-- [x] Parallel Merge Sort using OpenMP
-- [x] Parallel Merge Sort using PThread
+- [x] Sequential Sieve of Eratosthenes
+- [x] Parallel Sieve of Eratosthenes
+- [x] Parallel twin prime number finder using MPI_Send and MPI_Recv
+- [x] Parallel twin prime number finder using MPI_Get with windows
 
 ## Dependencies
 
 - C90
-- GNU90 (PThread)
 - CMake or Make
 - C90 compiler (GCC, Clang, MSVC, ...)
 
@@ -35,37 +33,33 @@ The implemented algorithm are the following:
 - [Description](#description)
 - [Dependencies](#Dependencies)
 - [Table of Contents](#table-of-contents)
-- [Quickstart](#Quickstart)
+- [Quickstart](#Quick-start)
 - [Algorithms](#Algorithms)
-    - [Sequential Merge Sort V1](#Sequential-Merge-Sort-V1)
-    - [Sequential Merge Sort V2](#Sequential-Merge-Sort-V2)
-    - [Merge Sort algorithm chosen](#Merge-Sort-algorithm-chosen)
-    - [Parallel Merge Sort](#Parallel-Merge-Sort)
-    - [Details on the implementation](#Details-on-the-implementation)
-- [Details on the implementation](#Details-on-the-implementation)
-    - [Sequential Merge Sort](#Sequential-Merge-Sort)
-    - [Parallel Merge Sort with OpenMP](#Parallel-Merge-Sort-with-OpenMP)
-    - [Parallel Merge Sort with Pthreads](#Parallel-Merge-Sort-with-Pthreads)
+    - [Sequential Prime Number Algorithm](#Sequential-Prime-Number-Algorithm)
+    - [Parallel Prime Number Algorithm](#Parallel-Prime-Number-Algorithm)
 - [Results](#Results)
-- [How to use](#How-to-use)
+    - [Twin Prime Number Algorithm using computer threads](#Twin-Prime-Number-Algorithm-using-computer-threads)
+    - [Twin Prime Number Algorithm using multiple computers](#Twin-Prime-Number-Algorithm-using-multiple-computers)
 - [Speed test](#Speed-test)
 - [Compilation](#Compilation)
-    - [Compilation with CMake](#Compilation-with-CMake)
-        - [Windows](#Windows)
-        - [Linux](#Linux)
-    - [Compile with Make](#Compile-with-Make)
-    - [Setup](#Setup)
-    - [Compilation](#Compilation)
+    - [Makefile build](#Makefile-build)
+    - [CMake build](#CMake-build)
+- [How to use](#How-to-use)
 - [Project Architecture](#Project-Architecture)
 - [GitHub Actions](#GitHub-Actions)
-- [Documentations](#Documentations)
+- [Documentations](#Documentation)
 - [Contributors](#Contributors)
 
 ## Quick Start
 
-PLACEHOLDER
+Depending on your operating system you will need to install some libs, they are installed differently depending on your
+system, please follow the instructions in the Compilation section.
 
-## Algorithm
+For an explanation on `How to use` go to the according section.
+
+The different algorithms used are described below.
+
+## Algorithms
 
 The algorithm used to calculate the twin prime numbers is the Sieve of Eratosthenes. It is a simple, ancient algorithm
 for finding all prime numbers up to any given limit. It does so by iteratively marking as composite (i.e., not prime)
@@ -81,7 +75,7 @@ the multiples of each prime, starting with the multiples of 2.
 
 The algorithm is implemented to count the number of prime numbers in a given range.
 
-### Prime Number Sequential Algorithm
+### Sequential Prime Number Algorithm
 
 ```algorithm
 1. Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n).
@@ -93,7 +87,7 @@ The algorithm is implemented to count the number of prime numbers in a given ran
 5. Count the number of prime numbers in the list.
 ```
 
-### Prime Number Parallel Algorithm
+### Parallel Prime Number Algorithm
 
 ```algorithm
 1. Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n). (Each process creates its share of list)
@@ -107,98 +101,142 @@ The algorithm is implemented to count the number of prime numbers in a given ran
 6. Count the number of prime numbers in the list.
 ```
 
+## Details on the implementation
+
+Each parallel version of the algoithm has been modified to work with small ranges.
+
+The original algorithm from Peter Pacheco for its book `from Parallel Programming in C with MPI and OpenMP` seems to
+have
+an issue calculating the prime numbers in a range smaller than 10 with 4 processes, it returns 5 prime numbers instead
+of 4.
+The modified algorithm is the following:
+
+```c
+proc0_size = (n - 1) / p;
+
+if ((2 + proc0_size) < (int)sqrt((double)n))
+{
+    if (!id)
+    {
+        printf("Too many processes\n");
+    }
+    MPI_Finalize();
+    exit(1);
+}
+```
+
+has been replaced by the following code:
+
+```c
+if (sqrt(n) >= (double)n / p)
+{
+    if (!id)
+    {
+        printf("Error : Too many processes\n");
+    }
+    MPI_Finalize();
+    exit(1);
+}
+```
+
+Preventing from having more processes than the square root of the range.
+
 ## Results
 
 The results of the programs are shown in the following table:
-<!--
-### Prime Number Algorithm
-
-| Number of processes | Time (s) |
-|---------------------|----------|
-| 1                   | 0.000    |
-| 2                   | 0.000    |
-| 4                   | 0.000    |
-| 8                   | 0.000    |
-| 16                  | 0.000    |
-| 32                  | 0.000    |
-| 64                  | 0.000    |
-| 128                 | 0.000    |
-
-<details>
-<summary>Click to see the detailed results</summary>
-| Number of processes | Time (s) |
-| ------------------- | -------- |
-| 1                   | 0.000    |
-| 2                   | 0.000    |
-| 4                   | 0.000    |
-| 8                   | 0.000    |
-| 16                  | 0.000    |
-| 32                  | 0.000    |
-| 64                  | 0.000    |
-| 128                 | 0.000    |
-</details>
--->
 
 ### Twin Prime Number Algorithm using computer threads
 
-| Number of processes | Time (s) |
-|---------------------|----------|
-| 1                   | 0.000    |
-| 2                   | 0.000    |
-| 4                   | 0.000    |
-| 8                   | 0.000    |
-| 16                  | 0.000    |
-| 32                  | 0.000    |
-| 64                  | 0.000    |
-| 128                 | 0.000    |
+| Number of processes | Sieve of Eratosthenes V1  | Sieve of Eratosthenes V2 | Time (s) |
+|---------------------|---------------------------|--------------------------|----------|
+| 1                   |                           |                          | 0.000    |
+| 2                   |                           |                          | 0.000    |
+| 3                   |                           |                          | 0.000    |
+| 4                   |                           |                          | 0.000    |
+| 5                   |                           |                          | 0.000    |
+| 6                   |                           |                          | 0.000    |
 
 <details>
 <summary>Click to see the detailed results</summary>
-| Number of processes | Time (s) |
-| ------------------- | -------- |
-| 1                   | 0.000    |
-| 2                   | 0.000    |
-| 4                   | 0.000    |
-| 8                   | 0.000    |
-| 16                  | 0.000    |
-| 32                  | 0.000    |
-| 64                  | 0.000    |
-| 128                 | 0.000    |
+
+| Number of processes | Sieve of Eratosthenes V1  | Sieve of Eratosthenes V2 | Time (s) |
+|---------------------|---------------------------|--------------------------|----------|
+| 1                   |                           |                          | 0.000    |
+| 2                   |                           |                          | 0.000    |
+| 3                   |                           |                          | 0.000    |
+| 4                   |                           |                          | 0.000    |
+| 5                   |                           |                          | 0.000    |
+| 6                   |                           |                          | 0.000    |
+
 </details>
 
 ### Twin Prime Number Algorithm using multiple computers
 
-| Number of processes | Time (s) |
-|---------------------|----------|
-| 1                   | 0.000    |
-| 2                   | 0.000    |
-| 4                   | 0.000    |
-| 8                   | 0.000    |
-| 16                  | 0.000    |
-| 32                  | 0.000    |
-| 64                  | 0.000    |
-| 128                 | 0.000    |
+| Number of computers | Sieve of Eratosthenes V1  | Sieve of Eratosthenes V2 | Time (s) |
+|---------------------|---------------------------|--------------------------|----------|
+| 1                   |                           |                          | 0.000    |
+| 2                   |                           |                          | 0.000    |
+| 3                   |                           |                          | 0.000    |
+| 4                   |                           |                          | 0.000    |
+| 5                   |                           |                          | 0.000    |
+| 6                   |                           |                          | 0.000    |
+| 7                   |                           |                          | 0.000    |
+| 9                   |                           |                          | 0.000    |
+| 10                  |                           |                          | 0.000    |
+| 11                  |                           |                          | 0.000    |
+| 12                  |                           |                          | 0.000    |
+| 13                  |                           |                          | 0.000    |
+| 14                  |                           |                          | 0.000    |
+| 15                  |                           |                          | 0.000    |
+| 16                  |                           |                          | 0.000    |
 
 <details>
 <summary>Click to see the detailed results</summary>
-| Number of processes | Time (s) |
-| ------------------- | -------- |
-| 1                   | 0.000    |
-| 2                   | 0.000    |
-| 4                   | 0.000    |
-| 8                   | 0.000    |
-| 16                  | 0.000    |
-| 32                  | 0.000    |
-| 64                  | 0.000    |
-| 128                 | 0.000    |
+
+| Number of computers | Sieve of Eratosthenes V1  | Sieve of Eratosthenes V2 | Time (s) |
+|---------------------|---------------------------|--------------------------|----------|
+| 1                   |                           |                          | 0.000    |
+| 2                   |                           |                          | 0.000    |
+| 3                   |                           |                          | 0.000    |
+| 4                   |                           |                          | 0.000    |
+| 5                   |                           |                          | 0.000    |
+| 6                   |                           |                          | 0.000    |
+| 7                   |                           |                          | 0.000    |
+| 9                   |                           |                          | 0.000    |
+| 10                  |                           |                          | 0.000    |
+| 11                  |                           |                          | 0.000    |
+| 12                  |                           |                          | 0.000    |
+| 13                  |                           |                          | 0.000    |
+| 14                  |                           |                          | 0.000    |
+| 15                  |                           |                          | 0.000    |
+| 16                  |                           |                          | 0.000    |
+
 </details>
 
-## Dependencies
+## Speed test
 
-- C90 compiler
-- CMake
-- Makefile
-- OpenMPI
+The project is set up with some bash scripts to test the speed of the different algorithms. You can start the test by
+running the speedTest.sh script in the speedTest folder.
+
+```bash
+./speedTestMonoComputer.sh <base n value> <multiplier> <iteration number>
+```
+
+Example :
+
+```bash
+./speedTestMonoComputer.sh 10 10 6
+```
+
+The output will be printed in the console. You can use a pipe to redirect the output to a file.
+
+```bash
+./speedTestMonoComputer.sh 10 10 6 > output.txt
+```
+
+> *Warning*  
+> You need to build the project before running the script (check the compilation section). You also need to be in
+> the speedTest folder to run the script correctly.
 
 ## Compilation
 
@@ -285,48 +323,48 @@ The twin prime program will count the number of twin prime numbers in the range 
 ## Project Architecture
 
 ~~~
-ParticleEngine
+cTwinPrimeNumberParallel
 ├── .github
-|  ├── labels.yml
-|  ├── release.yml
 │  ├── workflows
+│  │   |── c-cpp.yml
 │  │   |── cmake.yml
 │  │   |── codeql.yml
-│  │   |── cpp-cmake-publish.yml
 │  │   |── cpp-linter.yml
 │  │   |── dependency-review.yml
 │  │   |── flawfinder.yml
 │  │   |── greetings.yml
 │  │   |── label.yml
-│  │   |── msvc.yml
 │  │   |── stale.yml
-├── ParticleEngine
-│  │   |── *
-|  ├── Particle
-│  │   |── *
-|  ├── Scene
-│  │   |── *
-|  ├── CMakeLists.txt
-|  ├── InputManager.cpp
-|  ├── InputManager.h
-|  ├── main.cpp
-|  ├── ParticleEngine.cpp
-|  ├── ParticleEngine.h
+|  ├── labels.yml
+|  ├── release.yml
+├── buildMakeFile
+│   |── *
+├── finderSeq
+|  ├── CMakelists.txt
+|  ├── main.c
+├── PrimeNumberFinderParallel
+|  ├── CMakelists.txt
+|  ├── main.c
 ├── test
 |  ├── TestParticle
 │  │   |── *
 |  ├── CMakeLists.txt
-|  ├── integratorTest.cpp
-|  ├── physicHandlerTest.cpp
-|  ├── particleTest.cpp
+|  ├── main.c
+├── TwinPrimeNumberFinderMpiV1
+|  ├── CMakelists.txt
+|  ├── main.c
+├── TwinPrimeNumberFinderMpiV2
+|  ├── CMakelists.txt
+|  ├── main.c
 ├── .clang-format
+├── .clang-tidy
 ├── .editorconfig
 ├── .gitattributes
 ├── .gitignore
 ├── CMakelists.txt
 ├── CMakePresets.json
 ├── CMakeSettings.json
-├── imgui.ini
+├── Makefile
 ├── README.md
 ~~~
 

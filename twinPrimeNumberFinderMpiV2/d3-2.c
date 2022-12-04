@@ -3,8 +3,6 @@
 #include <mpi.h>
 #include <math.h>
 
-#define MONOTHREAD_THRESHOLD 1000000
-
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 #define BLOCK_LOW(id, p, n) ((id) * (n) / (p))
@@ -82,14 +80,6 @@ int main(int argc, char** argv) {
         MPI_Finalize();
         exit(1);
     }
-    /*    marked = (char*)malloc(size * sizeof(char));
-
-    if (marked == NULL)
-    {
-        printf("Cannot allocate enough memory\n");
-        MPI_Finalize();
-        exit(1);
-    }*/
 
     /* Create window and share only the end of the marked array (the last two variables) */
     MPI_Win win;
@@ -174,7 +164,6 @@ int main(int argc, char** argv) {
     MPI_Reduce(&count, &global_count, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
     /* Free array */
-    /*    free(marked);*/
     MPI_Free_mem(marked);
 
     /* Stop timer */
