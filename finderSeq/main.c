@@ -44,30 +44,6 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-/*void siegeOfEratosthenes(int n) {
-    int* primes = allocateMemory(n * sizeof(int));
-    populateArray(primes, n);
-
-    int i;
-    int j;
-    for (i = 2; i < n; i++)
-    {
-        if (primes[i] == 1)
-        {
-            for (j = i * i; j < n; j += i)
-            {
-                primes[j] = 0;
-            }
-        }
-    }
-
-    printPrimeNumbers(primes, n);
-
-    printTwinPrimeNumbers(primes, n);
-
-    free(primes);
-}*/
-
 void siegeOfEratosthenes(char* array, int n) {
     populateArray(array, n);
 
