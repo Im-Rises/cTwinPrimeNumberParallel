@@ -15,10 +15,10 @@ PrimeNumberFinderParallel:
 	mpicc primeNumberFinderMpi/main.c -o buildMakeFile/primeNumberFinderMpi -std=c90 -Wall -O2 -lm
 
 TwinPrimeNumberFinderParallelV1:
-	mpicc twinPrimeNumberFinderMpiV1/d3-1.c -o buildMakeFile/twinPrimeNumberFinderMpiV1 -std=c90 -Wall -O2 -lm
+	mpicc twinPrimeNumberFinderMpiV1/main.c -o buildMakeFile/twinPrimeNumberFinderMpiV1 -std=c90 -Wall -O2 -lm
 
 TwinPrimeNumberFinderParallelV2:
-	mpicc twinPrimeNumberFinderMpiV2/d3-2.c -o buildMakeFile/twinPrimeNumberFinderMpiV2 -std=c90 -Wall -O2 -lm
+	mpicc twinPrimeNumberFinderMpiV2/main.c -o buildMakeFile/twinPrimeNumberFinderMpiV2 -std=c90 -Wall -O2 -lm
 
 MrProper : clean
 	rm -f buildMakeFile/finderSequential
