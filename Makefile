@@ -7,7 +7,9 @@ all:
 	$(MAKE) clean
 
 FinderSequential:
-	gcc finderSeq/main.c -o buildMakeFile/finderSequential -std=c90 -Wall -O2
+	gcc ./finderSeq/main.c -o buildMakeFile/main.o -c -lm -std=c90 -Wall -O2
+	gcc ./finderSeq/commonFunctions.c -o buildMakeFile/commonFunctions.o -c -lm -std=c90 -Wall -O2
+	gcc -o buildMakeFile/finderSequential buildMakeFile/main.o buildMakeFile/commonFunctions.o -lm -std=c90 -Wall -O2
 
 PrimeNumberFinderParallel:
 	mpicc primeNumberFinderMpi/main.c -o buildMakeFile/primeNumberFinderMpi -std=c90 -Wall -O2 -lm

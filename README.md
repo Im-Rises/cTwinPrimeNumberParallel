@@ -163,7 +163,7 @@ The results of the programs are shown in the following table:
 | 100000000       | 16              | 0.19889  | 0.213629 | 440312             |
 
 <details>
-<summary>Click to see the detailed results</summary>
+<summary>Click to see detailed results</summary>
 
 | n (upper limit) | machines number | Time V1  | Time V2  | Twin prime numbers |
 |-----------------|-----------------|----------|----------|--------------------|

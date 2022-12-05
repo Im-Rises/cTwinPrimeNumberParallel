@@ -4,8 +4,6 @@
 #include <math.h>
 #include <time.h>
 
-#define MONOTHREAD_THRESHOLD 1000000
-
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 #define BLOCK_LOW(id, p, n) ((id) * (n) / (p))
