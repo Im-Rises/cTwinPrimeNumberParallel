@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <mpi.h>
 #include <math.h>
-#include <time.h>
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
@@ -16,7 +15,6 @@ int main(int argc, char** argv) {
     double elapsed_time;
     int first;
     int global_count = 0;
-    int high_value;
     int i;
     int id;
     int index;
@@ -24,7 +22,6 @@ int main(int argc, char** argv) {
     char* marked;
     int n;
     int p;
-    int proc0_size;
     int prime;
     int size;
 
@@ -33,7 +30,6 @@ int main(int argc, char** argv) {
     MPI_Barrier(MPI_COMM_WORLD);
 
     /* Start timer */
-    clock_t startClock = clock();
     elapsed_time = -MPI_Wtime();
 
     MPI_Comm_rank(MPI_COMM_WORLD, &id);
@@ -68,7 +64,6 @@ int main(int argc, char** argv) {
     }
 
     low_value = 2 + BLOCK_LOW(id, p, n - 1);
-    high_value = 2 + BLOCK_HIGH(id, p, n - 1);
     size = BLOCK_SIZE(id, p, n - 1);
 
     marked = (char*)malloc(size * sizeof(char));
@@ -137,7 +132,6 @@ int main(int argc, char** argv) {
     MPI_Reduce(&count, &global_count, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
     /* Stop timer */
-    clock_t endClock = clock();
     elapsed_time += MPI_Wtime();
 
     free(marked);
@@ -146,7 +140,6 @@ int main(int argc, char** argv) {
     {
         printf("%d primes are less than or equal to %d\n", global_count, n);
         printf("Total elapsed time: %10.6f\n", elapsed_time);
-        printf("CPU time: %f seconds\n", (double)(endClock - startClock) / CLOCKS_PER_SEC);
     }
 
     MPI_Finalize();
