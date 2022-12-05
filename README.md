@@ -464,11 +464,11 @@ cTwinPrimeNumberParallel
 
 This project uses GitHub Actions to build and test the program.
 
-C/C++ CI : This workflow will build the program using the makefile.  
-CMake : This workflow will build the program using the CMake build system.  
-CodeQL : This workflow will analyze the code to find security vulnerabilities.  
-cpp-linter : This workflow will analyze the code to find bugs and potential vulnerabilities.  
-flawfinder : This workflow will analyze the code to find bugs and potential vulnerabilities.
+- C/C++ CI: This workflow will build the program using the makefile.
+- CMake: This workflow will build the program using the CMake build system.
+- CodeQL: This workflow will analyze the code to find security vulnerabilities.
+- cpp-linter: This workflow will analyze the code to find bugs and potential vulnerabilities.
+- flawfinder: This workflow will analyze the code to find bugs and potential vulnerabilities.
 
 ## Documentation
 
