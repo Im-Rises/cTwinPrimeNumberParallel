@@ -1,5 +1,11 @@
+CC=gcc
+MPI_CC=mpicc
+CFLAGS=-std=c90 -W -Wall -ansi -pedantic -O2
+LDFLAGS=-lm
+OUTPUT_DIR=./buildMakeFile
+
 all:
-	$(MAKE) MrProper
+	$(MAKE) mrproper
 	$(MAKE) FinderSequential
 	$(MAKE) PrimeNumberFinderParallel
 	$(MAKE) TwinPrimeNumberFinderParallelV1
@@ -7,25 +13,27 @@ all:
 	$(MAKE) clean
 
 FinderSequential:
-	gcc ./finderSeq/main.c -o buildMakeFile/main.o -c -lm -std=c90 -Wall -O2
-	gcc ./finderSeq/commonFunctions.c -o buildMakeFile/commonFunctions.o -c -lm -std=c90 -Wall -O2
-	gcc -o buildMakeFile/finderSequential buildMakeFile/main.o buildMakeFile/commonFunctions.o -lm -std=c90 -Wall -O2
+	$(CC) ./finderSeq/main.c -o $(OUTPUT_DIR)/main.o -c $(CFLAGS) $(LDFLAGS)
+	$(CC) ./finderSeq/commonFunctions.c -o $(OUTPUT_DIR)/commonFunctions.o -c  $(CFLAGS) $(LDFLAGS)
+	$(CC) -o $(OUTPUT_DIR)/finderSequential $(OUTPUT_DIR)/main.o $(OUTPUT_DIR)/commonFunctions.o $(CFLAGS) $(LDFLAGS)
 
 PrimeNumberFinderParallel:
-	mpicc primeNumberFinderMpi/main.c -o buildMakeFile/primeNumberFinderMpi -std=c90 -Wall -O2 -lm
+	$(MPI_CC) primeNumberFinderMpi/main.c -o $(OUTPUT_DIR)/primeNumberFinderMpi $(CFLAGS) $(LDFLAGS)
 
 TwinPrimeNumberFinderParallelV1:
-	mpicc twinPrimeNumberFinderMpiV1/main.c -o buildMakeFile/twinPrimeNumberFinderMpiV1 -std=c90 -Wall -O2 -lm
+	$(MPI_CC) twinPrimeNumberFinderMpiV1/main.c -o $(OUTPUT_DIR)/twinPrimeNumberFinderMpiV1 $(CFLAGS) $(LDFLAGS)
 
 TwinPrimeNumberFinderParallelV2:
-	mpicc twinPrimeNumberFinderMpiV2/main.c -o buildMakeFile/twinPrimeNumberFinderMpiV2 -std=c90 -Wall -O2 -lm
+	$(MPI_CC) twinPrimeNumberFinderMpiV2/main.c -o $(OUTPUT_DIR)/twinPrimeNumberFinderMpiV2 $(CFLAGS) $(LDFLAGS)
 
-MrProper : clean
-	rm -f buildMakeFile/finderSequential
-	rm -f buildMakeFile/primeNumberFinderMpi
-	rm -f buildMakeFile/twinPrimeNumberFinderMpiV1
-	rm -f buildMakeFile/twinPrimeNumberFinderMpiV2
+.PHONY: clean mrproper all
+
+mrproper : clean
+	rm -f $(OUTPUT_DIR)/finderSequential
+	rm -f $(OUTPUT_DIR)/primeNumberFinderMpi
+	rm -f $(OUTPUT_DIR)/twinPrimeNumberFinderMpiV1
+	rm -f $(OUTPUT_DIR)/twinPrimeNumberFinderMpiV2
 	$(MAKE) clean
 
 clean :
-	rm -rf buildMakeFile/*.o
+	rm -rf $(OUTPUT_DIR)/*.o
